@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'application'
 apply plugin: 'eclipse'
 
 sourceCompatibility = 1.7
@@ -8,6 +9,7 @@ jar {
 		attributes 'Implementation-Title': 'ProductionLines', 'Implementation-Version': version
 	}
 }
+mainClassName = "test.SimpleScene"
 
 repositories {
 	flatDir { dirs 'jogamp' }

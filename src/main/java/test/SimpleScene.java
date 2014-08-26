@@ -7,7 +7,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.media.opengl.*;
 import javax.media.opengl.awt.GLCanvas;
-import javax.swing.JFrame;
 
 import com.jogamp.opengl.util.*;
 
@@ -24,7 +23,7 @@ public class SimpleScene implements GLEventListener {
         GLCapabilities caps = new GLCapabilities(glp);
         GLCanvas canvas = new GLCanvas(caps);
 
-        Frame frame = new JFrame("AWT Window Test");
+        Frame frame = new Frame("AWT Window Test");
         frame.add(canvas);
         frame.setUndecorated(true);
 		frame.setResizable(false);

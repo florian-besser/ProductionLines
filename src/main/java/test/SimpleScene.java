@@ -12,74 +12,75 @@ import com.jogamp.opengl.util.*;
 
 public class SimpleScene implements GLEventListener {
 
-    private double theta = 0;
-    private double s = 0;
-    private double c = 0;
-    
-    private static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+	private double theta = 0;
+	private double s = 0;
+	private double c = 0;
 
-    public static void main(String[] args) {
-        GLProfile glp = GLProfile.getDefault();
-        GLCapabilities caps = new GLCapabilities(glp);
-        GLCanvas canvas = new GLCanvas(caps);
+	private static GraphicsDevice device = GraphicsEnvironment
+			.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
-        Frame frame = new Frame("AWT Window Test");
-        frame.add(canvas);
-        frame.setUndecorated(true);
+	public static void main(String[] args) {
+		GLProfile glp = GLProfile.getDefault();
+		GLCapabilities caps = new GLCapabilities(glp);
+		GLCanvas canvas = new GLCanvas(caps);
+
+		Frame frame = new Frame("AWT Window Test");
+		frame.add(canvas);
+		frame.setUndecorated(true);
 		frame.setResizable(false);
 
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
-        
-        device.setFullScreenWindow(frame);
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
 
-        canvas.addGLEventListener(new SimpleScene());
+		device.setFullScreenWindow(frame);
 
-        FPSAnimator animator = new FPSAnimator(canvas, 60);
-        //animator.add(canvas);
-        animator.start();
-    }
+		canvas.addGLEventListener(new SimpleScene());
 
-    @Override
-    public void display(GLAutoDrawable drawable) {
-        update();
-        render(drawable);
-    }
+		FPSAnimator animator = new FPSAnimator(canvas, 60);
+		// animator.add(canvas);
+		animator.start();
+	}
 
-    @Override
-    public void dispose(GLAutoDrawable drawable) {
-    }
+	@Override
+	public void display(GLAutoDrawable drawable) {
+		update();
+		render(drawable);
+	}
 
-    @Override
-    public void init(GLAutoDrawable drawable) {
-    }
+	@Override
+	public void dispose(GLAutoDrawable drawable) {
+	}
 
-    @Override
-    public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
-    }
+	@Override
+	public void init(GLAutoDrawable drawable) {
+	}
 
-    private void update() {
-        theta += 0.01;
-        s = Math.sin(theta);
-        c = Math.cos(theta);
-    }
+	@Override
+	public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
+	}
 
-    private void render(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
+	private void update() {
+		theta += 0.01;
+		s = Math.sin(theta);
+		c = Math.cos(theta);
+	}
 
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+	private void render(GLAutoDrawable drawable) {
+		GL2 gl = drawable.getGL().getGL2();
 
-        // draw a triangle filling the window
-        gl.glBegin(GL.GL_TRIANGLES);
-        gl.glColor3f(1, 0, 0);
-        gl.glVertex2d(-c, -c);
-        gl.glColor3f(0, 1, 0);
-        gl.glVertex2d(0, c);
-        gl.glColor3f(0, 0, 1);
-        gl.glVertex2d(s, -s);
-        gl.glEnd();
-    }
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+
+		// draw a triangle filling the window
+		gl.glBegin(GL.GL_TRIANGLES);
+		gl.glColor3f(1, 0, 0);
+		gl.glVertex2d(-c, -c);
+		gl.glColor3f(0, 1, 0);
+		gl.glVertex2d(0, c);
+		gl.glColor3f(0, 0, 1);
+		gl.glVertex2d(s, -s);
+		gl.glEnd();
+	}
 }

@@ -1,26 +1,27 @@
-package scene;
-
-
-import java.util.ArrayList;
-import java.util.Collection;
+package view;
 
 import javax.media.opengl.*;
 
+import model.Model;
 import objects.GameObject;
 
-public class Scene implements GLEventListener {
+public class View implements GLEventListener {
 
-	private Collection<GameObject> objects = new ArrayList<GameObject>();
-	
+	// Looping
+	long timer = System.currentTimeMillis();
+	int frames = 0;
+
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 
-		for (GameObject object : objects) {
-			object.update();
+		for (GameObject object : Model.getObjects()) {
+			object.updateGraphics();
 			object.render(gl);
 		}
+
+		logFps();
 	}
 
 	@Override
@@ -34,12 +35,13 @@ public class Scene implements GLEventListener {
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
 	}
-	
-	public void add(GameObject object) {
-		objects.add(object);
-	}
-	
-	public void remove(GameObject object) {
-		objects.remove(object);
+
+	private void logFps() {
+		frames++;
+		if (System.currentTimeMillis() - timer > 1000) {
+			timer += 1000;
+			System.out.println("FPS: " + frames);
+			frames = 0;
+		}
 	}
 }

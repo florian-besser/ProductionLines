@@ -5,15 +5,18 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Timer;
 
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 
-import scene.Scene;
-import logic.Logic;
+import view.View;
 
 import com.jogamp.opengl.util.FPSAnimator;
+
+import controller.UserListener;
+import controller.ModelUpdater;
 
 public class Main {
 	
@@ -38,14 +41,16 @@ public class Main {
 
 		device.setFullScreenWindow(frame);
 
-		Scene scene = new Scene();
-		canvas.addGLEventListener(scene);
+		View view = new View();
+		canvas.addGLEventListener(view);
 
-		FPSAnimator animator = new FPSAnimator(canvas, 60);
+		FPSAnimator animator = new FPSAnimator(canvas, 120);
 		// animator.add(canvas);
 		animator.start();
 		
-		Logic logic = new Logic(scene);
-		logic.start();
+		Timer timer = new Timer();
+		timer.schedule(new ModelUpdater(), 0, 50);
+		
+		new UserListener();
 	}
 }

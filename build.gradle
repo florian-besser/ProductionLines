@@ -9,7 +9,7 @@ jar {
 		attributes 'Implementation-Title': 'ProductionLines', 'Implementation-Version': version
 	}
 }
-mainClassName = "test.SimpleScene"
+mainClassName = "game.Main"
 
 repositories {
 	flatDir { dirs 'jogamp' }

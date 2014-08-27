@@ -10,6 +10,9 @@ import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 
+import scene.Scene;
+import logic.Logic;
+
 import com.jogamp.opengl.util.FPSAnimator;
 
 public class Main {

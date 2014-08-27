@@ -1,4 +1,7 @@
-package game;
+package logic;
+
+import objects.Triangle;
+import scene.Scene;
 
 public class Logic extends Thread {
 

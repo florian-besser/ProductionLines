@@ -1,4 +1,4 @@
-package game;
+package objects;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;

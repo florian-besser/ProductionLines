@@ -1,10 +1,12 @@
-package game;
+package scene;
 
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.media.opengl.*;
+
+import objects.GameObject;
 
 public class Scene implements GLEventListener {
 

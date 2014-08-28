@@ -1,12 +1,50 @@
 package objects;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import javax.media.opengl.GL2;
 
 public abstract class GameObject {
 	
-	public abstract void updateGraphics();
+	private static Lock lock = new ReentrantLock();
+	protected double x;
+	protected double y;
+	
+	public GameObject(double x, double y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public void updateGraphicsAndRender(double deltaInSeconds, GL2 gl) {
+		lock.lock();
+		try {
+			safeUpdateGraphics(deltaInSeconds);
+			safeRender(gl);
+		} finally {
+			lock.unlock();
+		}
+	}
+	
+	public void tick() {
+		lock.lock();
+		try {
+			safeTick();
+		} finally {
+			lock.unlock();
+		}
+	}
+	
+	public double getX() {
+		return x;
+	}
+	
+	public double getY() {
+		return y;
+	}
+	
+	protected abstract void safeUpdateGraphics(double delta);
 
-	public abstract void render(GL2 gl);
+	protected abstract void safeRender(GL2 gl);
 
-	public abstract void tick();
+	protected abstract void safeTick();
 }

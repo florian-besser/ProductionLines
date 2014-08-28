@@ -3,5 +3,6 @@ package model;
 public enum GameState {
 	MENU,
 	RUNNING,
-	PAUSED
+	PAUSED, 
+	EXIT
 }

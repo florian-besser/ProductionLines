@@ -51,6 +51,12 @@ public class Main {
 		Timer timer = new Timer();
 		timer.schedule(new ModelUpdater(), 0, 50);
 		
-		new UserListener();
+		UserListener userListener = new UserListener();
+		canvas.addKeyListener(userListener);
+		canvas.addMouseListener(userListener);
+		canvas.addMouseMotionListener(userListener);
+		
+		canvas.requestFocus();
+		canvas.requestFocusInWindow();
 	}
 }

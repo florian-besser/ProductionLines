@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import com.sun.javafx.geom.Vec3d;
 
 import objects.GameObject;
+import objects.GuiObject;
 
 public class Model {
 
@@ -18,7 +19,8 @@ public class Model {
 	private static Lock writeLock = globalLock.writeLock();
 
 	// Store
-	private static Collection<GameObject> objects = new ArrayList<GameObject>();
+	private static Collection<GameObject> gameObjects = new ArrayList<GameObject>();
+	private static Collection<GuiObject> guiObjects = new ArrayList<GuiObject>();
 	private static Vec3d camera = new Vec3d(0, 5, 0);
 	private static Vec3d cameraDirection = new Vec3d(1, -5, 0);
 	private static Vec3d cameraMovement = new Vec3d(0, 0, 0);
@@ -26,28 +28,55 @@ public class Model {
 	// State
 	private static GameState state = GameState.MENU;
 
-	public static void add(GameObject object) {
+	public static void addGameObject(GameObject object) {
 		writeLock.lock();
 		try{
-			objects.add(object);
+			gameObjects.add(object);
 		} finally {
 			writeLock.unlock();
 		}
 	}
 
-	public static void remove(GameObject object) {
+	public static void addGuiObject(GuiObject object) {
 		writeLock.lock();
 		try{
-			objects.remove(object);
+			guiObjects.add(object);
 		} finally {
 			writeLock.unlock();
 		}
 	}
 
-	public static Collection<GameObject> getObjects() {
+	public static void removeGameObject(GameObject object) {
+		writeLock.lock();
+		try{
+			gameObjects.remove(object);
+		} finally {
+			writeLock.unlock();
+		}
+	}
+
+	public static void removeGuiObject(GuiObject object) {
+		writeLock.lock();
+		try{
+			guiObjects.remove(object);
+		} finally {
+			writeLock.unlock();
+		}
+	}
+
+	public static Collection<GameObject> getGameObjects() {
 		readLock.lock();
 		try {
-			return new ArrayList<GameObject>(objects);
+			return new ArrayList<GameObject>(gameObjects);
+		} finally {
+			readLock.unlock();
+		}
+	}
+
+	public static Collection<GuiObject> getGuiObjects() {
+		readLock.lock();
+		try {
+			return new ArrayList<GuiObject>(guiObjects);
 		} finally {
 			readLock.unlock();
 		}

@@ -9,6 +9,7 @@ import javax.media.opengl.glu.gl2.GLUgl2;
 
 import model.Model;
 import objects.GameObject;
+import objects.GuiObject;
 
 import com.jogamp.opengl.util.gl2.GLUT;
 import com.sun.javafx.geom.Vec3d;
@@ -24,7 +25,7 @@ public class View implements GLEventListener {
 	private GLUT glut = new GLUT();
 
 	//Screen
-	private float SCREEN_WIDTH, SCREEN_HEIGHT;
+	private int SCREEN_WIDTH, SCREEN_HEIGHT;
 	// ANGLES ARE IN DEGREES 0-2Pi
 	private static final double VIEW_ANGLE = Math.PI / 4;
 	private static final double RAD2ANG = 180.0 / Math.PI;
@@ -37,14 +38,7 @@ public class View implements GLEventListener {
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-		gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-		gl.glLoadIdentity();
 		
-		Vec3d camera = Model.getCamera();
-		Vec3d cameraDirection = Model.getCameraDirection();
-
-		glu.gluLookAt(camera.x, camera.y, camera.z, camera.x + cameraDirection.x, camera.z + cameraDirection.y, camera.z + cameraDirection.z, up.x, up.y, up.z);
-
 		/*gl.glEnableClientState(GL2.GL_LINE_LOOP);
 		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
@@ -53,16 +47,15 @@ public class View implements GLEventListener {
 		double now = System.nanoTime();
 		deltaInSeconds = (now - lastTime) / 1000000000;
 		lastTime = now;
-		
+
 		moveCamera(deltaInSeconds);
-		for (GameObject object : Model.getObjects()) {
-			object.updateGraphicsAndRender(deltaInSeconds, gl);
-		}
+
+		render3dObjects(gl);
 		
-		gl.glColor3d (1.0, 1.0, 1.0);
-		glut.glutWireCube((float) 1.0);
-		gl.glFlush ();
+		renderDebugWireCobe(gl);
 		
+		render2dObjects(gl);
+
 		logFps();
 		
 		/*gl.glDisableClientState(GL2.GL_LINE_LOOP);
@@ -74,6 +67,30 @@ public class View implements GLEventListener {
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);*/
 	}
 
+	private void render3dObjects(GL2 gl) {
+		init3d(gl);
+		Vec3d camera = Model.getCamera();
+		Vec3d cameraDirection = Model.getCameraDirection();
+		glu.gluLookAt(camera.x, camera.y, camera.z, camera.x + cameraDirection.x, camera.z + cameraDirection.y, camera.z + cameraDirection.z, up.x, up.y, up.z);
+
+		for (GameObject object : Model.getGameObjects()) {
+			object.updateGraphicsAndRender(deltaInSeconds, gl);
+		}
+	}
+
+	private void render2dObjects(GL2 gl) {
+		init2d(gl);
+		for (GuiObject object : Model.getGuiObjects()) {
+			object.render(gl);
+		}
+	}
+	
+	private void renderDebugWireCobe(GL2 gl) {
+		gl.glColor3d (1.0, 1.0, 1.0);
+		glut.glutWireCube((float) 1.0);
+		gl.glFlush ();
+	}
+	
 	private void moveCamera(double deltaInSeconds) {
 		Vec3d movement = Model.getCameraMovement();
 		movement.mul(deltaInSeconds);
@@ -86,10 +103,7 @@ public class View implements GLEventListener {
 
 	@Override
 	public void init(GLAutoDrawable drawable) {
-		GL2 gl = drawable.getGL().getGL2();
-		gl.glShadeModel(GL2.GL_SMOOTH);
-		gl.glEnable(GL.GL_DEPTH_TEST);
-		gl.glDepthFunc(GL.GL_LEQUAL);
+
 	}
 
 	@Override
@@ -98,14 +112,35 @@ public class View implements GLEventListener {
 
 		SCREEN_WIDTH = width;
 		SCREEN_HEIGHT = height;
-		float h = SCREEN_WIDTH / SCREEN_HEIGHT;
+	}
 
-		GL2 gl = drawable.getGL().getGL2();
+	private void init3d(GL2 gl) {
+		float h = ((float)SCREEN_WIDTH) / SCREEN_HEIGHT;
+
+		gl.glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
 		gl.glLoadIdentity();
 		glu.gluPerspective(VIEW_ANGLE * RAD2ANG, h, NEAR_CLIPPING, FAR_CLIPPING);
 		gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
 		gl.glLoadIdentity();
+		gl.glShadeModel(GL2.GL_SMOOTH);
+		gl.glEnable(GL.GL_DEPTH_TEST);
+		gl.glDepthFunc(GL.GL_LEQUAL);
+
+	}
+	
+	private void init2d(GL2 gl) {
+		gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+		gl.glLoadIdentity();
+
+	    glu.gluOrtho2D(0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
+
+	    gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+	    gl.glLoadIdentity();
+	    gl.glTranslated(0.375, 0.375, 0.0);
+
+	    gl.glDisable(GL.GL_DEPTH_TEST);
+		gl.glEnable(GL2.GL_TEXTURE_2D);
 	}
 
 	private void logFps() {

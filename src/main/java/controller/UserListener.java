@@ -1,11 +1,14 @@
 package controller;
 
+import helpers.Texture;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import objects.MenuButton;
 import objects.Triangle;
 import model.GameState;
 import model.Model;
@@ -21,7 +24,11 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 
 
 	public UserListener() {
-		Model.add(new Triangle(0, 0));
+		Model.addGuiObject(new MenuButton(10, 10, 100, 100, Texture.DEBUG_SMALL));
+		Model.addGuiObject(new MenuButton(10, 200, 500, 500, Texture.DEBUG));
+		Model.setState(GameState.MENU);
+		
+		Model.addGameObject(new Triangle(0, 0));
 		Model.setState(GameState.RUNNING);
 	}
 

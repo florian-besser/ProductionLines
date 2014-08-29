@@ -23,7 +23,7 @@ public class ModelUpdater extends TimerTask {
 			deltaTicks += (now - lastTime) / NS_PER_TICK;
 			lastTime = now;
 			while(deltaTicks >= 1){
-				for (GameObject object : Model.getObjects()) {
+				for (GameObject object : Model.getGameObjects()) {
 					object.tick();
 				}
 				updates++;

@@ -23,7 +23,7 @@ public class Triangle extends GameObject {
 
 	@Override
 	public void safeRender(GL2 gl) {
-		// draw a triangle filling the window
+		// draw a triangle
 		gl.glBegin(GL.GL_TRIANGLES);
 		gl.glColor3d(color, 0, 0);
 		gl.glVertex3d(-c, 0, -c);

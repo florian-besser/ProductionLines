@@ -7,12 +7,13 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.gl2.GLUgl2;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+
 import model.Model;
 import objects.GameObject;
 import objects.GuiObject;
 
 import com.jogamp.opengl.util.gl2.GLUT;
-import com.sun.javafx.geom.Vec3d;
 
 public class View implements GLEventListener {
 
@@ -31,7 +32,7 @@ public class View implements GLEventListener {
 	private static final double RAD2ANG = 180.0 / Math.PI;
 	private static final double NEAR_CLIPPING = 1.0;
 	private static final double FAR_CLIPPING = 1000.0;
-	private static final Vec3d up = new Vec3d(0, 1, 0);
+	private static final Vector3D up = new Vector3D(0, 1, 0);
 
 
 	@Override
@@ -69,9 +70,9 @@ public class View implements GLEventListener {
 
 	private void render3dObjects(GL2 gl) {
 		init3d(gl);
-		Vec3d camera = Model.getCamera();
-		Vec3d cameraDirection = Model.getCameraDirection();
-		glu.gluLookAt(camera.x, camera.y, camera.z, camera.x + cameraDirection.x, camera.z + cameraDirection.y, camera.z + cameraDirection.z, up.x, up.y, up.z);
+		Vector3D camera = Model.getCamera();
+		Vector3D cameraDirection = Model.getCameraDirection();
+		glu.gluLookAt(camera.getX(), camera.getY(), camera.getZ(), camera.getX() + cameraDirection.getX(), camera.getZ() + cameraDirection.getY(), camera.getZ() + cameraDirection.getZ(), up.getX(), up.getY(), up.getZ());
 
 		for (GameObject object : Model.getGameObjects()) {
 			object.updateGraphicsAndRender(deltaInSeconds, gl);
@@ -92,8 +93,8 @@ public class View implements GLEventListener {
 	}
 	
 	private void moveCamera(double deltaInSeconds) {
-		Vec3d movement = Model.getCameraMovement();
-		movement.mul(deltaInSeconds);
+		Vector3D movement = Model.getCameraMovement();
+		movement.scalarMultiply(deltaInSeconds);
 		Model.moveCamera(movement);
 	}
 

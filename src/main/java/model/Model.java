@@ -6,7 +6,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import com.sun.javafx.geom.Vec3d;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 import objects.GameObject;
 import objects.GuiObject;
@@ -21,9 +21,9 @@ public class Model {
 	// Store
 	private static Collection<GameObject> gameObjects = new ArrayList<GameObject>();
 	private static Collection<GuiObject> guiObjects = new ArrayList<GuiObject>();
-	private static Vec3d camera = new Vec3d(0, 5, 0);
-	private static Vec3d cameraDirection = new Vec3d(1, -5, 0);
-	private static Vec3d cameraMovement = new Vec3d(0, 0, 0);
+	private static Vector3D camera = new Vector3D(0, 5, 0);
+	private static Vector3D cameraDirection = new Vector3D(1, -5, 0);
+	private static Vector3D cameraMovement = new Vector3D(0, 0, 0);
 	
 	// State
 	private static GameState state = GameState.MENU;
@@ -90,29 +90,29 @@ public class Model {
 	}
 
 	public static void setCameraMovementX(int x) {
-		cameraMovement.x = x;
+		cameraMovement = new Vector3D(x, cameraMovement.getY(), cameraMovement.getZ());
 	}
 	public static void setCameraMovementY(int y) {
-		cameraMovement.y = y;
+		cameraMovement = new Vector3D(cameraMovement.getX(), y, cameraMovement.getZ());
 	}
 	public static void setCameraMovementZ(int z) {
-		cameraMovement.z = z;
+		cameraMovement = new Vector3D(cameraMovement.getX(), cameraMovement.getY(), z);
 	}
 
-	public static Vec3d getCamera() {
-		return new Vec3d(camera);
+	public static Vector3D getCamera() {
+		return new Vector3D(camera.toArray());
 	}
 
-	public static Vec3d getCameraDirection() {
-		return new Vec3d(cameraDirection);
+	public static Vector3D getCameraDirection() {
+		return new Vector3D(cameraDirection.toArray());
 	}
 
-	public static Vec3d getCameraMovement() {
+	public static Vector3D getCameraMovement() {
 		//System.out.println("Camera moving in " + movement.x + " " + movement.y + " " + movement.z + ", delta is " + deltaInSeconds);
-		return new Vec3d(cameraMovement);
+		return new Vector3D(cameraMovement.toArray());
 	}
 
-	public static void moveCamera(Vec3d cameraMovement) {
+	public static void moveCamera(Vector3D cameraMovement) {
 		camera.add(cameraMovement);
 		//System.out.println("Camera is now at " + camera.x + " " + camera.y + " " + camera.z);
 	}

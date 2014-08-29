@@ -33,7 +33,7 @@ public class TextureLoader {
 
 	private static BufferedImage loadImage(String loc) {
 		try {
-			return ImageIO.read(new File("src\\main\\resources\\" + loc));
+			return ImageIO.read(new File("src/main/resources/" + loc));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(-1);

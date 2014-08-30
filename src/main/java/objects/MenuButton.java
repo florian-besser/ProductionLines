@@ -5,6 +5,8 @@ import helpers.Texture;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
+import view.View;
+
 public class MenuButton extends GuiObject {
 
 	private Texture texture;
@@ -17,9 +19,12 @@ public class MenuButton extends GuiObject {
 	@Override
 	public void render(GL2 gl) {
 		gl.glBindTexture(GL.GL_TEXTURE_2D, texture.getHandlerId(gl));
-        // translate to the right location and prepare to draw
-		//gl.glTranslatef(20, 20, 0);
-		//gl.glColor3d(1, 1, 1);
+		gl.glLoadIdentity();
+		// translate to the right location and prepare to draw
+		int w = View.getScreenWidth();
+		int h = View.getScreenHeight();
+		gl.glTranslated(w/2-width/2, h/2-height/2, 0);
+		gl.glColor3d(1, 1, 1);
 
         // draw a quad textured to match the sprite
 		gl.glBegin(GL2.GL_QUADS);
@@ -36,16 +41,6 @@ public class MenuButton extends GuiObject {
         gl.glEnd();
 		
 		gl.glBindTexture(GL.GL_TEXTURE_2D, 0);
-		// draw a triangle filling the window
-		/*gl.glColor3d(1, 1, 1);
-		
-		gl.glBegin(GL2.GL_QUADS);
-		gl.glVertex2d(2*x, 2*y);
-		gl.glVertex2d(2*x+width, 2*y);
-		gl.glVertex2d(2*x+width, 2*y+height);
-		gl.glVertex2d(2*x, 2*y+height);
-		
-		gl.glEnd();*/
 	}
 
 }

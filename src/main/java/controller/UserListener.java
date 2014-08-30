@@ -24,8 +24,8 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 
 
 	public UserListener() {
-		Model.addGuiObject(new MenuButton(10, 10, 100, 100, Texture.DEBUG_SMALL));
-		Model.addGuiObject(new MenuButton(10, 200, 500, 500, Texture.DEBUG));
+		Model.addGuiObject(new MenuButton(0, -100, 500, 100, Texture.BUTTON_START));
+		Model.addGuiObject(new MenuButton(0, 100, 500, 100, Texture.BUTTON_EXIT));
 		Model.setState(GameState.MENU);
 		
 		Model.addGameObject(new Triangle(0, 0));

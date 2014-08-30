@@ -113,7 +113,7 @@ public class Model {
 	}
 
 	public static void moveCamera(Vector3D cameraMovement) {
-		camera.add(cameraMovement);
+		camera = camera.add(cameraMovement);
 		//System.out.println("Camera is now at " + camera.x + " " + camera.y + " " + camera.z);
 	}
 }

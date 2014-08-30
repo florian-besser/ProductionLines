@@ -26,7 +26,8 @@ public class View implements GLEventListener {
 	private GLUT glut = new GLUT();
 
 	//Screen
-	private int SCREEN_WIDTH, SCREEN_HEIGHT;
+	private static int screenWidth;
+	private static int screenHeight;
 	// ANGLES ARE IN DEGREES 0-2Pi
 	private static final double VIEW_ANGLE = Math.PI / 4;
 	private static final double RAD2ANG = 180.0 / Math.PI;
@@ -94,7 +95,7 @@ public class View implements GLEventListener {
 	
 	private void moveCamera(double deltaInSeconds) {
 		Vector3D movement = Model.getCameraMovement();
-		movement.scalarMultiply(deltaInSeconds);
+		movement = movement.scalarMultiply(deltaInSeconds);
 		Model.moveCamera(movement);
 	}
 
@@ -111,14 +112,14 @@ public class View implements GLEventListener {
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
 		System.out.println("reshape called");
 
-		SCREEN_WIDTH = width;
-		SCREEN_HEIGHT = height;
+		screenWidth = width;
+		screenHeight = height;
 	}
 
 	private void init3d(GL2 gl) {
-		float h = ((float)SCREEN_WIDTH) / SCREEN_HEIGHT;
+		float h = ((float)screenWidth) / screenHeight;
 
-		gl.glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+		gl.glViewport(0, 0, screenWidth, screenHeight);
 		gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
 		gl.glLoadIdentity();
 		glu.gluPerspective(VIEW_ANGLE * RAD2ANG, h, NEAR_CLIPPING, FAR_CLIPPING);
@@ -134,7 +135,7 @@ public class View implements GLEventListener {
 		gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
 		gl.glLoadIdentity();
 
-	    glu.gluOrtho2D(0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
+	    glu.gluOrtho2D(0.0f, screenWidth, screenHeight, 0.0f);
 
 	    gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
 	    gl.glLoadIdentity();
@@ -151,5 +152,13 @@ public class View implements GLEventListener {
 			System.out.println("FPS: " + frames);
 			frames = 0;
 		}
+	}
+
+	public static int getScreenWidth() {
+		return screenWidth;
+	}
+
+	public static int getScreenHeight() {
+		return screenHeight;
 	}
 }

@@ -6,7 +6,9 @@ import javax.media.opengl.GL2;
 
 public enum Texture {
 	DEBUG("DebugTexture.png"),
-	DEBUG_SMALL("DebugTextureSmall.png", "Text", new Font("sansserif", Font.BOLD, 64), 10, 100);
+	DEBUG_SMALL("DebugTextureSmall.png", "Text", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 10, 100),
+	BUTTON_START("BlueButton.png", "Start", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 90, 65),
+	BUTTON_EXIT("BlueButton.png", "Exit", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 105, 65);
 	
 	private String loc;
 	private String text;

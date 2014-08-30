@@ -1,5 +1,6 @@
 package controller;
 
+import helpers.FontEnum;
 import helpers.Texture;
 
 import java.awt.event.KeyEvent;
@@ -9,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import objects.MenuButton;
+import objects.MenuString;
 import objects.Triangle;
 import model.GameState;
 import model.Model;
@@ -26,6 +28,7 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 	public UserListener() {
 		Model.addGuiObject(new MenuButton(0, -100, 500, 100, Texture.BUTTON_START));
 		Model.addGuiObject(new MenuButton(0, 100, 500, 100, Texture.BUTTON_EXIT));
+		Model.addGuiObject(new MenuString(-240, 300, "ProductionLines", FontEnum.TewntyEightDaysLater.getFont().deriveFont(72f)));
 		Model.setState(GameState.MENU);
 		
 		Model.addGameObject(new Triangle(0, 0));

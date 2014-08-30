@@ -10,9 +10,13 @@ import view.View;
 public class MenuButton extends GuiObject {
 
 	private Texture texture;
-	
+	protected int width;
+	protected int height;
+
 	public MenuButton(int x, int y, int width, int height, Texture texture) {
-		super(x, y, width, height);
+		super(x, y);
+		this.width = width;
+		this.height = height;
 		this.texture = texture;
 	}
 

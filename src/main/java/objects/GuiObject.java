@@ -4,16 +4,12 @@ import javax.media.opengl.GL2;
 
 public abstract class GuiObject {
 	
-	protected double x;
-	protected double y;
-	protected double width;
-	protected double height;
+	protected int x;
+	protected int y;
 	
-	public GuiObject(double x, double y, double width, double height) {
+	public GuiObject(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.width = width;
-		this.height = height;
 	}
 	
 	public abstract void render(GL2 gl);

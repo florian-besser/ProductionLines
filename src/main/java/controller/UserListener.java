@@ -27,7 +27,8 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 
 	public UserListener() {
 		Model.addGuiObject(new MenuButton(0, -100, 500, 100, Texture.BUTTON_START));
-		Model.addGuiObject(new MenuButton(0, 100, 500, 100, Texture.BUTTON_EXIT));
+		Model.addGuiObject(new MenuButton(0, 100, 500, 100, Texture.BUTTON_LEVEL_EDITOR));
+		Model.addGuiObject(new MenuButton(0, 300, 500, 100, Texture.BUTTON_EXIT));
 		Model.addGuiObject(new MenuString(-240, 300, "ProductionLines", FontEnum.TewntyEightDaysLater.getFont().deriveFont(72f)));
 		Model.setState(GameState.MENU);
 		

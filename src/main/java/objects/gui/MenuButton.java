@@ -1,4 +1,4 @@
-package objects;
+package objects.gui;
 
 import helpers.Texture;
 
@@ -7,17 +7,12 @@ import javax.media.opengl.GL2;
 
 import view.View;
 
-public class MenuButton extends GuiObject {
+public abstract class MenuButton extends GuiObject {
 
-	private Texture texture;
-	protected int width;
-	protected int height;
-
-	public MenuButton(int x, int y, int width, int height, Texture texture) {
-		super(x, y);
-		this.width = width;
-		this.height = height;
-		this.texture = texture;
+	protected Texture texture = Texture.DEBUG_SMALL;
+	
+	public MenuButton(int x, int y, int width, int height) {
+		super(x, y, width, height);
 	}
 
 	@Override

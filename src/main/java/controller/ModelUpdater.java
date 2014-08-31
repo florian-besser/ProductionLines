@@ -2,9 +2,8 @@ package controller;
 
 import java.util.TimerTask;
 
-import model.GameState;
 import model.Model;
-import objects.GameObject;
+import objects.game.GameObject;
 
 public class ModelUpdater extends TimerTask {
 
@@ -18,20 +17,19 @@ public class ModelUpdater extends TimerTask {
 
 	@Override
 	public void run() {
-		if (Model.getState() == GameState.RUNNING) {
-			long now = System.nanoTime();
-			deltaTicks += (now - lastTime) / NS_PER_TICK;
-			lastTime = now;
-			while(deltaTicks >= 1){
-				for (GameObject object : Model.getGameObjects()) {
-					object.tick();
-				}
-				updates++;
-				deltaTicks--;
+		long now = System.nanoTime();
+		deltaTicks += (now - lastTime) / NS_PER_TICK;
+		lastTime = now;
+		while(deltaTicks >= 1){
+			for (GameObject object : Model.getGameObjects()) {
+				object.tick();
 			}
-					
-			logTicks();
+			updates++;
+			deltaTicks--;
 		}
+				
+		logTicks();
+		
 	}
 
 	private void logTicks() {

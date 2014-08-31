@@ -1,18 +1,15 @@
 package controller;
 
-import helpers.FontEnum;
-import helpers.Texture;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import objects.MenuButton;
-import objects.MenuString;
-import objects.Triangle;
-import model.GameState;
+import objects.general.GeneralObject;
+import states.ExitState;
+import states.MainMenuState;
+import view.View;
 import model.Model;
 
 public class UserListener implements KeyListener, MouseListener, MouseMotionListener {
@@ -26,14 +23,7 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 
 
 	public UserListener() {
-		Model.addGuiObject(new MenuButton(0, -100, 500, 100, Texture.BUTTON_START));
-		Model.addGuiObject(new MenuButton(0, 100, 500, 100, Texture.BUTTON_LEVEL_EDITOR));
-		Model.addGuiObject(new MenuButton(0, 300, 500, 100, Texture.BUTTON_EXIT));
-		Model.addGuiObject(new MenuString(-240, 300, "ProductionLines", FontEnum.TewntyEightDaysLater.getFont().deriveFont(72f)));
-		Model.setState(GameState.MENU);
-		
-		Model.addGameObject(new Triangle(0, 0));
-		Model.setState(GameState.RUNNING);
+		Model.setState(new MainMenuState());
 	}
 
 	@Override
@@ -43,9 +33,7 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 		if (keyCode == KeyEvent.VK_ESCAPE || (keyCode == KeyEvent.VK_C) && e.isControlDown()) {
 			System.out.println("Shutting Down...");
 			
-			Model.setState(GameState.EXIT);
-		} else if (keyCode == KeyEvent.VK_R) {
-			//TODO: Reinitialize?
+			Model.setState(new ExitState());
 		} else if (keyCode == forwardKey) {
 			Model.setCameraMovementX(1);
 		} else if (keyCode == backKey) {
@@ -82,49 +70,43 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		//Use keyPressed instead
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		//No functionality yet
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		//Irrelevant
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseClicked(MouseEvent e) {
+		//Use mousePressed instead
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		//Irrelevant
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		//Irrelevant
 	}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mousePressed(MouseEvent e) {
+		//System.out.println("Mouse pressed on " + e.getX() + " " + e.getY());
+		GeneralObject obj = Model.findObject(e.getX() - View.getScreenWidth()/2, e.getY() - View.getScreenHeight()/2);
+		obj.click();
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseReleased(MouseEvent e) {
+		//System.out.println("Mouse released on " + e.getX() + " " + e.getY());		
 	}
 }

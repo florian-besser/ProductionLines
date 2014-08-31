@@ -1,4 +1,4 @@
-package objects;
+package objects.game;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -40,5 +40,10 @@ public class Triangle extends GameObject {
 		if (color > 1) {
 			color--;
 		}
+	}
+
+	@Override
+	public void click() {
+		//Do nothing
 	}
 }

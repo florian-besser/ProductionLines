@@ -1,10 +1,13 @@
-package objects;
+package objects.game;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
 import javax.media.opengl.GL2;
 
-public abstract class GameObject {
+import objects.general.GeneralObject;
+
+public abstract class GameObject extends GeneralObject {
 	
 	private static Lock lock = new ReentrantLock();
 	protected double x;

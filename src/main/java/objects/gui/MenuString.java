@@ -1,4 +1,4 @@
-package objects;
+package objects.gui;
 
 import java.awt.Font;
 
@@ -14,7 +14,7 @@ public class MenuString extends GuiObject {
 	private String text;
 	
 	public MenuString(int x, int y, String text, Font font) {
-		super(x, y);
+		super(x, y, 0, 0);
 		this.text = text;
 		this.textrenderer = new TextRenderer(font);
 	}
@@ -29,6 +29,11 @@ public class MenuString extends GuiObject {
 		textrenderer.draw(text, w/2+x, h/2+y);
 	    // ... more draw commands, color changes, etc.
 		textrenderer.endRendering();
+	}
+
+	@Override
+	public void click() {
+		//Do nothing
 	}
 
 }

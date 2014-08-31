@@ -8,8 +8,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
-import objects.GameObject;
-import objects.GuiObject;
+import objects.game.GameObject;
+import objects.general.EmptyObject;
+import objects.general.GeneralObject;
+import objects.gui.GuiObject;
+import states.GameState;
 
 public class Model {
 
@@ -25,9 +28,6 @@ public class Model {
 	private static Vector3D cameraDirection = new Vector3D(1, -5, 0);
 	private static Vector3D cameraMovement = new Vector3D(0, 0, 0);
 	
-	// State
-	private static GameState state = GameState.MENU;
-
 	public static void addGameObject(GameObject object) {
 		writeLock.lock();
 		try{
@@ -64,6 +64,14 @@ public class Model {
 		}
 	}
 
+	public static void clearGuiObjects() {
+		writeLock.lock();
+		try{
+			guiObjects.clear();
+		} finally {
+			writeLock.unlock();
+		}
+	}
 	public static Collection<GameObject> getGameObjects() {
 		readLock.lock();
 		try {
@@ -82,11 +90,8 @@ public class Model {
 		}
 	}
 
-	public static GameState getState() {
-		return state;
-	}
 	public static void setState(GameState s) {
-		state = s;
+		s.activate();
 	}
 
 	public static void setCameraMovementX(int x) {
@@ -115,5 +120,22 @@ public class Model {
 	public static void moveCamera(Vector3D cameraMovement) {
 		camera = camera.add(cameraMovement);
 		//System.out.println("Camera is now at " + camera.x + " " + camera.y + " " + camera.z);
+	}
+
+	public static GeneralObject findObject(int x, int y) {
+		for (GuiObject guiObject : getGuiObjects()) {
+			int objectX = guiObject.getX();
+			int objectY = guiObject.getY();
+			int objectWidth = guiObject.getWidth();
+			int objectHeight = guiObject.getHeight();
+			if (objectX - objectWidth/2 <= x && x <= objectX + objectWidth/2
+					&& objectY - objectHeight/2 <= y && y <= objectY + objectHeight/2) {
+				return guiObject;
+			}
+		}
+		
+		//TODO: Game objects.
+		
+		return new EmptyObject();
 	}
 }

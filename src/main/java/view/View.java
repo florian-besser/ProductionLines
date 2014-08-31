@@ -10,8 +10,8 @@ import javax.media.opengl.glu.gl2.GLUgl2;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 import model.Model;
-import objects.GameObject;
-import objects.GuiObject;
+import objects.game.GameObject;
+import objects.gui.GuiObject;
 
 import com.jogamp.opengl.util.gl2.GLUT;
 
@@ -54,7 +54,7 @@ public class View implements GLEventListener {
 
 		render3dObjects(gl);
 		
-		renderDebugWireCobe(gl);
+		renderDebugWireCube(gl);
 		
 		render2dObjects(gl);
 
@@ -87,7 +87,7 @@ public class View implements GLEventListener {
 		}
 	}
 	
-	private void renderDebugWireCobe(GL2 gl) {
+	private void renderDebugWireCube(GL2 gl) {
 		gl.glColor3d (1.0, 1.0, 1.0);
 		glut.glutWireCube((float) 1.0);
 		gl.glFlush ();

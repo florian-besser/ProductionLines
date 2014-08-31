@@ -9,7 +9,10 @@ public enum Texture {
 	DEBUG_SMALL("DebugTextureSmall.png", "Text", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 10, 100),
 	BUTTON_START("BlueButton.png", "Start", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 90, 65),
 	BUTTON_EXIT("BlueButton.png", "Exit", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 105, 65), 
-	BUTTON_LEVEL_EDITOR("BlueButton.png", "Level Editor", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 5, 65);
+	BUTTON_LEVEL_EDITOR("BlueButton.png", "Level Editor", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 5, 65), 
+	BUTTON_LOAD_LEVEL("BlueButton.png", "Load Level", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 5, 65), 
+	BUTTON_CREATE_LEVEL("BlueButton.png", "Create Level", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 5, 65), 
+	GREY("Grey.png");
 	
 	private String loc;
 	private String text;

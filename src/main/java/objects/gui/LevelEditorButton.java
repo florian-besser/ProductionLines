@@ -1,5 +1,7 @@
 package objects.gui;
 
+import model.Model;
+import states.LevelEditorLoadState;
 import helpers.Texture;
 
 public class LevelEditorButton extends MenuButton {
@@ -11,8 +13,7 @@ public class LevelEditorButton extends MenuButton {
 
 	@Override
 	public void click() {
-		// TODO Auto-generated method stub
-
+		Model.setState(new LevelEditorLoadState());
 	}
 
 }

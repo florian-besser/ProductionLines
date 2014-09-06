@@ -1,7 +1,7 @@
 package objects.gui;
 
 import java.awt.Font;
-import java.util.Collection;
+import java.util.List;
 
 import helpers.Texture;
 
@@ -14,12 +14,15 @@ import view.View;
 
 public class MenuSelect extends GuiObject {
 
+	private static final int Y_OFFSET = 10;
+	private static final int X_OFFSET = 10;
 	protected Texture texture = Texture.DEBUG_SMALL;
-	private Collection<String> lines;
+	private List<String> lines;
+	private int chosen = 0;
 	private TextRenderer textrenderer;
 	
-	public MenuSelect(int x, int y, int width, int height, Collection<String> lines, Font font) {
-		super(x, y, width, height);
+	public MenuSelect(String id, int x, int y, int width, int height, List<String> lines, Font font) {
+		super(id, x, y, width, height);
 		this.texture = Texture.GREY;
 		this.lines = lines;
 		this.textrenderer = new TextRenderer(font);
@@ -62,22 +65,31 @@ public class MenuSelect extends GuiObject {
 		int w = View.getScreenWidth();
 		int h = View.getScreenHeight();
 		textrenderer.beginRendering(w, h);
-	    // optionally set the color
-		textrenderer.setColor(1.0f, 0.2f, 0.2f, 0.8f);
 		
-		int offset = -textrenderer.getFont().getSize();
+		int i = 0;
 		for (String text : lines) {
-			textrenderer.draw(text, w/2-width/2 + 10 +x, h/2+height/2 - 10 -y + offset);
-			offset -= textrenderer.getFont().getSize();
+			if (i == chosen) {
+				textrenderer.setColor(1.0f, 0.2f, 0.2f, 0.8f);
+			} else {
+				textrenderer.setColor(0.2f, 0.2f, 1.0f, 0.8f);
+			}
+			
+			int offset = -(i+1) * textrenderer.getFont().getSize();
+			textrenderer.draw(text, w/2-width/2 + X_OFFSET +x, h/2+height/2 - Y_OFFSET -y + offset);
+			i++;
 		}
 	    // ... more draw commands, color changes, etc.
 		textrenderer.endRendering();
 	}
 
 	@Override
-	public void click() {
-		// TODO Highlight clicked entry
-		
+	public void click(int x, int y) {
+		y -= Y_OFFSET;
+		chosen = y / textrenderer.getFont().getSize();
+	}
+	
+	public String getChosen() {
+		return lines.get(chosen);
 	}
 
 }

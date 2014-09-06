@@ -9,8 +9,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 import objects.game.GameObject;
-import objects.general.EmptyObject;
-import objects.general.GeneralObject;
+import objects.gui.EmptyObject;
 import objects.gui.GuiObject;
 import states.GameState;
 
@@ -72,6 +71,16 @@ public class Model {
 			writeLock.unlock();
 		}
 	}
+
+	public static void clearGameObjects() {
+		writeLock.lock();
+		try{
+			gameObjects.clear();
+		} finally {
+			writeLock.unlock();
+		}
+	}
+	
 	public static Collection<GameObject> getGameObjects() {
 		readLock.lock();
 		try {
@@ -122,7 +131,7 @@ public class Model {
 		//System.out.println("Camera is now at " + camera.x + " " + camera.y + " " + camera.z);
 	}
 
-	public static GeneralObject findObject(int x, int y) {
+	public static GuiObject findGuiObject(int x, int y) {
 		for (GuiObject guiObject : getGuiObjects()) {
 			int objectX = guiObject.getX();
 			int objectY = guiObject.getY();
@@ -133,9 +142,17 @@ public class Model {
 				return guiObject;
 			}
 		}
-		
-		//TODO: Game objects.
-		
+			
 		return new EmptyObject();
 	}
+
+	public static GuiObject findGuiObject(String string) {
+		for (GuiObject guiObject : getGuiObjects()) {
+			if (guiObject.getId().equals(string)) {
+				return guiObject;
+			}
+		}
+		return new EmptyObject();
+	}
+
 }

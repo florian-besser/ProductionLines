@@ -7,12 +7,12 @@ import helpers.Texture;
 public class LevelEditorButton extends MenuButton {
 
 	public LevelEditorButton(int x, int y, int width, int height) {
-		super(x, y, width, height);
+		super("LevelEditorButton", x, y, width, height);
 		this.texture = Texture.BUTTON_LEVEL_EDITOR;
 	}
 
 	@Override
-	public void click() {
+	public void click(int x, int y) {
 		Model.setState(new LevelEditorLoadState());
 	}
 

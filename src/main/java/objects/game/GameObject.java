@@ -5,17 +5,19 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.media.opengl.GL2;
 
-import objects.general.GeneralObject;
-
-public abstract class GameObject extends GeneralObject {
+public abstract class GameObject {
 	
 	private static Lock lock = new ReentrantLock();
-	protected double x;
-	protected double y;
+	protected int x;
+	protected int y;
+	protected int width;
+	protected int height;
 	
-	public GameObject(double x, double y) {
+	public GameObject(int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;
+		this.width = width;
+		this.height = height;
 	}
 	
 	public void updateGraphicsAndRender(double deltaInSeconds, GL2 gl) {
@@ -50,4 +52,6 @@ public abstract class GameObject extends GeneralObject {
 	protected abstract void safeRender(GL2 gl);
 
 	protected abstract void safeTick();
+	
+	public abstract void click();
 }

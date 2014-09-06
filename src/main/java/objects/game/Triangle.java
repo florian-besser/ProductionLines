@@ -9,8 +9,8 @@ public class Triangle extends GameObject {
 	private double c;
 	private double color = 1;
 	
-	public Triangle(double x, double y) {
-		super(x, y);
+	public Triangle(int x, int y) {
+		super(x, y, 1, 1);
 		theta = 0;
 	}
 	

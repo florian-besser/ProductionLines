@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import objects.general.GeneralObject;
+import objects.gui.GuiObject;
 import states.ExitState;
 import states.MainMenuState;
 import view.View;
@@ -101,8 +101,11 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 	@Override
 	public void mousePressed(MouseEvent e) {
 		//System.out.println("Mouse pressed on " + e.getX() + " " + e.getY());
-		GeneralObject obj = Model.findObject(e.getX() - View.getScreenWidth()/2, e.getY() - View.getScreenHeight()/2);
-		obj.click();
+		//System.out.println("Mouse pressed (relatively) on " + (e.getX() - View.getScreenWidth()/2) + " " + (e.getY() - View.getScreenHeight()/2));
+		GuiObject obj = Model.findGuiObject(e.getX() - View.getScreenWidth()/2, e.getY() - View.getScreenHeight()/2);
+		//System.out.println("Found object " + obj.getX() + " " + obj.getY() + " with dimensions " + obj.getWidth() + " " + obj.getHeight());
+		obj.click(e.getX() - View.getScreenWidth()/2 - (obj.getX() - obj.getWidth()/2), e.getY() - View.getScreenHeight()/2 - (obj.getY() - obj.getHeight()/2));
+		//System.out.println("Clicked object (relatively) " + (e.getX() - View.getScreenWidth()/2 - (obj.getX() - obj.getWidth()/2)) + " " + (e.getY() - View.getScreenHeight()/2 - (obj.getY() - obj.getHeight()/2)));
 	}
 
 	@Override

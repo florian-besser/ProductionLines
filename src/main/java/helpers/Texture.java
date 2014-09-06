@@ -12,7 +12,9 @@ public enum Texture {
 	BUTTON_LEVEL_EDITOR("BlueButton.png", "Level Editor", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 5, 65), 
 	BUTTON_LOAD_LEVEL("BlueButton.png", "Load Level", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 5, 65), 
 	BUTTON_CREATE_LEVEL("BlueButton.png", "Create Level", FontEnum.TewntyEightDaysLater.getFont().deriveFont(64f), 5, 65), 
-	GREY("Grey.png");
+	GREY("Grey.png"), 
+	DIRT("dirt256_tiled512.jpg"),
+	DIRT_SMALL("dirt256_tiled128.jpg");
 	
 	private String loc;
 	private String text;

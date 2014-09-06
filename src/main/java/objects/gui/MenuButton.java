@@ -11,8 +11,8 @@ public abstract class MenuButton extends GuiObject {
 
 	protected Texture texture = Texture.DEBUG_SMALL;
 	
-	public MenuButton(int x, int y, int width, int height) {
-		super(x, y, width, height);
+	public MenuButton(String id, int x, int y, int width, int height) {
+		super(id, x, y, width, height);
 	}
 
 	@Override

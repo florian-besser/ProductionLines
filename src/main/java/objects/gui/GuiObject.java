@@ -2,16 +2,16 @@ package objects.gui;
 
 import javax.media.opengl.GL2;
 
-import objects.general.GeneralObject;
-
-public abstract class GuiObject extends GeneralObject {
+public abstract class GuiObject {
 	
 	protected int x;
 	protected int y;
 	protected int width;
 	protected int height;
+	String id;
 	
-	public GuiObject(int x, int y, int width, int height) {
+	public GuiObject(String id, int x, int y, int width, int height) {
+		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -34,5 +34,11 @@ public abstract class GuiObject extends GeneralObject {
 
 	public int getHeight() {
 		return height;
-	}	
+	}
+	
+	public abstract void click(int x, int y);
+
+	public String getId() {
+		return id;
+	}
 }

@@ -45,6 +45,10 @@ public class View implements GLEventListener {
 		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 		gl.glEnable(GL2.GL_TEXTURE_2D);*/
+		
+		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
+		//gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);	//Crashes
+		gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 
 		double now = System.nanoTime();
 		deltaInSeconds = (now - lastTime) / 1000000000;
@@ -60,6 +64,10 @@ public class View implements GLEventListener {
 
 		logFps();
 		
+		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
+		//gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
+		gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+
 		/*gl.glDisableClientState(GL2.GL_LINE_LOOP);
 		gl.glDisable(GL2.GL_TEXTURE_2D);
 		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);

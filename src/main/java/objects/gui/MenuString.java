@@ -14,7 +14,7 @@ public class MenuString extends GuiObject {
 	private String text;
 	
 	public MenuString(int x, int y, String text, Font font) {
-		super(x, y, 0, 0);
+		super(text, x, y, 0, 0);
 		this.text = text;
 		this.textrenderer = new TextRenderer(font);
 	}
@@ -32,7 +32,7 @@ public class MenuString extends GuiObject {
 	}
 
 	@Override
-	public void click() {
+	public void click(int x, int y) {
 		//Do nothing
 	}
 

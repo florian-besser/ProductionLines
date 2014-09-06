@@ -83,9 +83,13 @@ public class View implements GLEventListener {
 		Vector3D cameraDirection = Model.getCameraDirection();
 		glu.gluLookAt(camera.getX(), camera.getY(), camera.getZ(), camera.getX() + cameraDirection.getX(), camera.getZ() + cameraDirection.getY(), camera.getZ() + cameraDirection.getZ(), up.getX(), up.getY(), up.getZ());
 
+		long start = System.nanoTime();
 		for (GameObject object : Model.getGameObjects()) {
 			object.updateGraphicsAndRender(deltaInSeconds, gl);
 		}
+		long finish = System.nanoTime();
+		System.out.println("Used " + (finish - start)/1000000 + " ms for 3D rendering.");
+
 	}
 
 	private void render2dObjects(GL2 gl) {

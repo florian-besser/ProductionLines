@@ -24,6 +24,7 @@ public class LevelEditorLoadState extends GameState {
 		Model.addGuiObject(new MenuSelect("existingMaps", -290, -50, 500, 500, existingMaps, font));
 		
 		List<String> newMaps = new ArrayList<String>();
+		newMaps.add("10x10");
 		newMaps.add("100x100");
 		newMaps.add("250x250");
 		newMaps.add("500x500");

@@ -8,39 +8,13 @@ import javax.media.opengl.GL2;
 
 import com.jogamp.common.nio.Buffers;
 
-public abstract class Model {
+public class GameModelLoader {
 
-	private int vboId = -1;
-	private int iboId = -1;
-	protected float[] points;
-	protected float[] texCoords;
-	protected int[] indexes;
-
-	public int getVboHandlerId(GL2 gl) {
-		if (vboId == -1) {
-			setInternals(gl);
-			loadInternally(gl);
-		}
-		
-		return vboId;
-	}
-	
-	public int getIboHandlerId(GL2 gl) {
-		if (iboId == -1) {
-			setInternals(gl);
-			loadInternally(gl);
-		}
-		
-		return iboId;
-	}
-		
-	protected abstract void setInternals(GL2 gl);
-
-	protected void loadInternally(GL2 gl) {
-		int[] tmp = new int[2];
-		gl.glGenBuffers(2, tmp, 0);
-		vboId = tmp[0];
-		iboId = tmp[1];
+	public static int[] load(GL2 gl, float[] points, int[] indexes, float[] texCoords) {
+		int[] handlers = new int[2];
+		gl.glGenBuffers(2, handlers, 0);
+		int vboId = handlers[0];
+		int iboId = handlers[1];
 		
 		System.out.println("Loading Model with vboId " + vboId + " and iboId " + iboId);
 
@@ -100,10 +74,8 @@ public abstract class Model {
 
 		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, iboId);
 		gl.glBufferSubData(GL.GL_ELEMENT_ARRAY_BUFFER, 0, indexBuffer.capacity() * 4, indexBuffer);
-	}
-
-	public int getIndexLength() {
-		return indexes.length;
+		
+		return handlers;
 	}
 
 }

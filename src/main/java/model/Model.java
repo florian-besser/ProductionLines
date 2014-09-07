@@ -11,6 +11,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import objects.game.GameObject;
 import objects.gui.EmptyObject;
 import objects.gui.GuiObject;
+import objects.scenery.SceneryObject;
 import states.GameState;
 
 public class Model {
@@ -21,11 +22,16 @@ public class Model {
 	private static Lock writeLock = globalLock.writeLock();
 
 	// Store
+	private static Collection<SceneryObject> sceneryObjects = new ArrayList<SceneryObject>();
+	private static boolean redrawScenery = false;
 	private static Collection<GameObject> gameObjects = new ArrayList<GameObject>();
 	private static Collection<GuiObject> guiObjects = new ArrayList<GuiObject>();
 	private static Vector3D camera = new Vector3D(0, 5, 0);
 	private static Vector3D cameraDirection = new Vector3D(1, -5, 0);
 	private static Vector3D cameraMovement = new Vector3D(0, 0, 0);
+	public static final double NEAR_CLIPPING = 1.0;
+	public static final double FAR_CLIPPING = 1000.0;
+	
 	
 	public static void addGameObject(GameObject object) {
 		writeLock.lock();
@@ -40,6 +46,16 @@ public class Model {
 		writeLock.lock();
 		try{
 			guiObjects.add(object);
+		} finally {
+			writeLock.unlock();
+		}
+	}
+
+	public static void addSceneryObject(SceneryObject object) {
+		writeLock.lock();
+		try{
+			sceneryObjects.add(object);
+			redrawScenery = true;
 		} finally {
 			writeLock.unlock();
 		}
@@ -63,6 +79,16 @@ public class Model {
 		}
 	}
 
+	public static void removeScneneryObject(SceneryObject object) {
+		writeLock.lock();
+		try{
+			sceneryObjects.remove(object);
+			redrawScenery = true;
+		} finally {
+			writeLock.unlock();
+		}
+	}
+
 	public static void clearGuiObjects() {
 		writeLock.lock();
 		try{
@@ -76,6 +102,16 @@ public class Model {
 		writeLock.lock();
 		try{
 			gameObjects.clear();
+		} finally {
+			writeLock.unlock();
+		}
+	}
+	
+	public static void clearSceneryObjects() {
+		writeLock.lock();
+		try{
+			sceneryObjects.clear();
+			redrawScenery = true;
 		} finally {
 			writeLock.unlock();
 		}
@@ -99,6 +135,24 @@ public class Model {
 		}
 	}
 
+	public static Collection<SceneryObject> getSceneryObjects() {
+		readLock.lock();
+		try {
+			return new ArrayList<SceneryObject>(sceneryObjects);
+		} finally {
+			readLock.unlock();
+		}
+	}
+
+
+	public static boolean isRedrawScenery() {
+		return redrawScenery;
+	}
+	
+	public static void setNoRedrawNecessary() {
+		redrawScenery = false;
+	}
+	
 	public static void setState(GameState s) {
 		s.activate();
 	}
@@ -128,6 +182,11 @@ public class Model {
 
 	public static void moveCamera(Vector3D cameraMovement) {
 		camera = camera.add(cameraMovement);
+		if (camera.getY() < NEAR_CLIPPING) {
+			camera = new Vector3D(camera.getX(), NEAR_CLIPPING, camera.getZ());
+		} else if (camera.getY() > FAR_CLIPPING) {
+			camera = new Vector3D(camera.getX(), FAR_CLIPPING, camera.getZ());
+		}
 		//System.out.println("Camera is now at " + camera.x + " " + camera.y + " " + camera.z);
 	}
 
@@ -153,6 +212,10 @@ public class Model {
 			}
 		}
 		return new EmptyObject();
+	}
+
+	public static void addCameraY(double preciseWheelRotation) {
+		moveCamera(new Vector3D(0, preciseWheelRotation, 0));
 	}
 
 }

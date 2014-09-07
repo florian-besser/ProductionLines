@@ -1,15 +1,15 @@
-package helpers;
+package objects.game.gameModels;
 
 import javax.media.opengl.GL2;
 
-public enum Models {
+public enum GameModelEnum {
 	
 	SQUARE(new SquareModel());
 	
 	int handlerId = -1;
-	private Model model;
+	private GameModel model;
 	
-	private Models(Model model) {
+	private GameModelEnum(GameModel model) {
 		this.model = model;
 	}
 

@@ -5,6 +5,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import objects.gui.GuiObject;
 import states.ExitState;
@@ -12,7 +14,7 @@ import states.MainMenuState;
 import view.View;
 import model.Model;
 
-public class UserListener implements KeyListener, MouseListener, MouseMotionListener {
+public class UserListener implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener  {
 	
 	private static final int forwardKey = KeyEvent.VK_W;
 	private static final int backKey = KeyEvent.VK_S;
@@ -46,7 +48,7 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 			Model.setCameraMovementY(1);
 		} else if (keyCode == downKey) {
 			Model.setCameraMovementY(-1);
-		} 
+		}
 	}
 
 	@Override
@@ -111,5 +113,11 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		//System.out.println("Mouse released on " + e.getX() + " " + e.getY());		
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		//System.out.println("Mouse Wheel moved by " + e.getPreciseWheelRotation()+ " units.");
+		Model.addCameraY(e.getPreciseWheelRotation());
 	}
 }

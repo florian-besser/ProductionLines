@@ -55,6 +55,7 @@ public class Main {
 		canvas.addKeyListener(userListener);
 		canvas.addMouseListener(userListener);
 		canvas.addMouseMotionListener(userListener);
+		canvas.addMouseWheelListener(userListener);
 		
 		canvas.requestFocus();
 		canvas.requestFocusInWindow();

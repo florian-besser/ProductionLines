@@ -1,12 +1,9 @@
-package helpers;
+package objects.scenery.sceneryModels;
 
-import javax.media.opengl.GL2;
+public class SquareModel extends SceneryModel {
 
-public class SquareModel extends Model {
-
-	@Override
-	public void setInternals(GL2 gl) {
-		this.points = new float[4*3];
+	public SquareModel() {
+		float[] points = new float[4*3];
 		points[0] = 0;	//Lower Left
 		points[1] = 0;
 		points[2] = 0;
@@ -19,8 +16,9 @@ public class SquareModel extends Model {
 		points[9] = 0;	//Upper Left
 		points[10] = 0;
 		points[11] = 1;
+		setPoints(points);
 		
-		this.texCoords = new float[4*2];
+		float[] texCoords = new float[4*2];
 		texCoords[0] = 0;	//Lower Left
 		texCoords[1] = 0;
 		texCoords[2] = 1;	//Lower Right
@@ -29,14 +27,16 @@ public class SquareModel extends Model {
 		texCoords[5] = 1;
 		texCoords[6] = 0;	//Upper Left
 		texCoords[7] = 1;
+		setTexCoords(texCoords);
 		
-		this.indexes = new int[6];
+		int[] indexes = new int[6];
 		indexes[0] = 0;		//Lower Left
 		indexes[1] = 2;		//Lower Right
 		indexes[2] = 1;		//Upper Right
 		indexes[3] = 0;		//Lower Left
 		indexes[4] = 2;		//Upper Right
 		indexes[5] = 3;		//Upper Left
+		setIndexes(indexes);
 	}
 
 }

@@ -1,15 +1,16 @@
 package objects.game;
 
-import helpers.Models;
 import helpers.Texture;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
+import objects.game.gameModels.GameModelEnum;
+
 public class Square extends GameObject {
 
 	protected Texture texture = Texture.DIRT;
-	protected Models model = Models.SQUARE;
+	protected GameModelEnum model = GameModelEnum.SQUARE;
 
 	public Square(int x, int y) {
 		super(x, y, 1, 1);

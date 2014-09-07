@@ -1,6 +1,6 @@
 package states;
 
-import objects.game.Square;
+import objects.scenery.ScenerySquare;
 import model.Model;
 
 
@@ -20,7 +20,7 @@ public class LevelEditorState extends GameState {
 		Model.clearGameObjects();
 		for (int x = 0; x < xDimension; x++) {
 			for (int y = 0; y < yDimension; y++) {
-				Model.addGameObject(new Square(x, y));
+				Model.addSceneryObject(new ScenerySquare(x, y));
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package objects.gui;
+package objects.gui.menu;
 
 import model.Model;
 import states.LevelEditorLoadState;

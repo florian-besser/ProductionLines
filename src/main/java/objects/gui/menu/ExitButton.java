@@ -1,4 +1,4 @@
-package objects.gui;
+package objects.gui.menu;
 
 import states.ExitState;
 import model.Model;

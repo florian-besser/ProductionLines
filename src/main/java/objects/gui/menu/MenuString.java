@@ -1,8 +1,11 @@
-package objects.gui;
+package objects.gui.menu;
 
 import java.awt.Font;
 
 import javax.media.opengl.GL2;
+
+import objects.gui.GuiObject;
+import objects.gui.anchorpoints.CenterAnchor;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -14,13 +17,13 @@ public class MenuString extends GuiObject {
 	private String text;
 	
 	public MenuString(int x, int y, String text, Font font) {
-		super(text, x, y, 0, 0);
+		super(text, new CenterAnchor(), x, y, 0, 0);
 		this.text = text;
 		this.textrenderer = new TextRenderer(font);
 	}
 	
 	@Override
-	public void render(GL2 gl) {
+	public void internalRender(GL2 gl) {
 		int w = View.getScreenWidth();
 		int h = View.getScreenHeight();
 		textrenderer.beginRendering(w, h);

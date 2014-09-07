@@ -1,4 +1,4 @@
-package objects.gui;
+package objects.gui.menu;
 
 import states.LevelEditorState;
 import model.Model;
@@ -14,7 +14,7 @@ public class CreateLevelButton extends MenuButton {
 
 	@Override
 	public void click(int x, int y) {
-		MenuSelect ms = (MenuSelect) Model.findGuiObject("newMaps");
+		PanelSelectTexts ms = (PanelSelectTexts) Model.findGuiObject("newMaps");
 		String levelSize = ms.getChosen();
 		String[] dimensions = levelSize.split("x");
 		int xDimension = Integer.valueOf(dimensions[0]);

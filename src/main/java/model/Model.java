@@ -26,11 +26,12 @@ public class Model {
 	private static boolean redrawScenery = false;
 	private static Collection<GameObject> gameObjects = new ArrayList<GameObject>();
 	private static Collection<GuiObject> guiObjects = new ArrayList<GuiObject>();
-	private static Vector3D camera = new Vector3D(0, 5, 0);
+	private static Vector3D camera = new Vector3D(0, 10, 0);
 	private static Vector3D cameraDirection = new Vector3D(1, -5, 0);
 	private static Vector3D cameraMovement = new Vector3D(0, 0, 0);
 	public static final double NEAR_CLIPPING = 1.0;
 	public static final double FAR_CLIPPING = 1000.0;
+	private static final double CAMERA_OFFSET = 10;
 	
 	
 	public static void addGameObject(GameObject object) {
@@ -182,10 +183,10 @@ public class Model {
 
 	public static void moveCamera(Vector3D cameraMovement) {
 		camera = camera.add(cameraMovement);
-		if (camera.getY() < NEAR_CLIPPING) {
-			camera = new Vector3D(camera.getX(), NEAR_CLIPPING, camera.getZ());
-		} else if (camera.getY() > FAR_CLIPPING) {
-			camera = new Vector3D(camera.getX(), FAR_CLIPPING, camera.getZ());
+		if (camera.getY() < NEAR_CLIPPING + CAMERA_OFFSET) {
+			camera = new Vector3D(camera.getX(), NEAR_CLIPPING + CAMERA_OFFSET, camera.getZ());
+		} else if (camera.getY() > FAR_CLIPPING - CAMERA_OFFSET) {
+			camera = new Vector3D(camera.getX(), FAR_CLIPPING - CAMERA_OFFSET, camera.getZ());
 		}
 		//System.out.println("Camera is now at " + camera.x + " " + camera.y + " " + camera.z);
 	}
@@ -196,8 +197,8 @@ public class Model {
 			int objectY = guiObject.getY();
 			int objectWidth = guiObject.getWidth();
 			int objectHeight = guiObject.getHeight();
-			if (objectX - objectWidth/2 <= x && x <= objectX + objectWidth/2
-					&& objectY - objectHeight/2 <= y && y <= objectY + objectHeight/2) {
+			if (objectX <= x && x <= objectX + objectWidth
+					&& objectY <= y && y <= objectY + objectHeight) {
 				return guiObject;
 			}
 		}

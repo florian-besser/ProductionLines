@@ -1,4 +1,4 @@
-package objects.gui;
+package objects.gui.menu;
 
 import java.awt.Font;
 import java.util.List;
@@ -8,28 +8,31 @@ import helpers.Texture;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
+import objects.gui.GuiObject;
+import objects.gui.anchorpoints.CenterAnchor;
+
 import com.jogamp.opengl.util.awt.TextRenderer;
 
 import view.View;
 
-public class MenuSelect extends GuiObject {
+public class PanelSelectTexts extends GuiObject {
 
-	private static final int Y_OFFSET = 10;
-	private static final int X_OFFSET = 10;
+	private static final int Y_OFFSET = 30;
+	private static final int X_OFFSET = 30;
 	protected Texture texture = Texture.DEBUG_SMALL;
 	private List<String> lines;
 	private int chosen = 0;
 	private TextRenderer textrenderer;
 	
-	public MenuSelect(String id, int x, int y, int width, int height, List<String> lines, Font font) {
-		super(id, x, y, width, height);
-		this.texture = Texture.GREY;
+	public PanelSelectTexts(String id, int x, int y, int width, int height, List<String> lines, Font font) {
+		super(id, new CenterAnchor(), x, y, width, height);
+		this.texture = Texture.PANEL;
 		this.lines = lines;
 		this.textrenderer = new TextRenderer(font);
 	}
 
 	@Override
-	public void render(GL2 gl) {
+	public void internalRender(GL2 gl) {
 		renderBackground(gl);
 		
 		renderLines();
@@ -37,11 +40,6 @@ public class MenuSelect extends GuiObject {
 
 	private void renderBackground(GL2 gl) {
 		gl.glBindTexture(GL.GL_TEXTURE_2D, texture.getHandlerId(gl));
-		gl.glLoadIdentity();
-		// translate to the right location and prepare to draw
-		int w = View.getScreenWidth();
-		int h = View.getScreenHeight();
-		gl.glTranslated(w/2-width/2, h/2-height/2, 0);
 		gl.glColor3d(1, 1, 1);
 
         // draw a quad textured to match the sprite
@@ -75,7 +73,7 @@ public class MenuSelect extends GuiObject {
 			}
 			
 			int offset = -(i+1) * textrenderer.getFont().getSize();
-			textrenderer.draw(text, w/2-width/2 + X_OFFSET +x, h/2+height/2 - Y_OFFSET -y + offset);
+			textrenderer.draw(text, w/2 + X_OFFSET +x, h/2 - Y_OFFSET -y + offset);
 			i++;
 		}
 	    // ... more draw commands, color changes, etc.

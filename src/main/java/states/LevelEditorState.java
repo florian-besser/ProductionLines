@@ -34,7 +34,11 @@ public class LevelEditorState extends GameState {
 		}
 
 		List<PanelContent> terrainTypes = new ArrayList<PanelContent>();
+		terrainTypes.add(new PanelContent("Dirt", 64, 64, Texture.DIRT_SMALL));
+		terrainTypes.add(new PanelContent("Grass", 64, 64, Texture.GRASS_SMALL));
+		terrainTypes.add(new PanelContent("Blocked", 64, 64, Texture.BLOCKED_SMALL));
 		Model.addGuiObject(new Panel("terrainTypes", new BottomCenterAnchor(), -250, -96, 500, 96, terrainTypes));
+
 		List<PanelContent> brushSizes = new ArrayList<PanelContent>();
 		brushSizes.add(new PanelContent("BigBrush", 64, 64, Texture.BIG_BRUSH));
 		brushSizes.add(new PanelContent("MediumBigBrush", 64, 64, Texture.MEDIUM_BIG_BRUSH));

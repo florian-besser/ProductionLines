@@ -53,6 +53,8 @@ public class View implements GLEventListener {
 		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
 		// gl.glEnableClientState(GL2.GL_NORMAL_ARRAY); //Crashes
 		gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+		gl.glEnable(GL.GL_BLEND);
+		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
 		double now = System.nanoTime();
 		deltaInSeconds = (now - lastTime) / 1000000000;
@@ -138,7 +140,7 @@ public class View implements GLEventListener {
 		if (indexesLength > 0) {
 			// long start = System.nanoTime();
 
-			gl.glColor3d(1, 1, 1);
+			gl.glColor4d(1, 1, 1, 1);
 
 			gl.glBindTexture(GL.GL_TEXTURE_2D, Texture.DIRT_SMALL.getHandlerId(gl));
 			gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, sceneryVboHandler);
@@ -183,7 +185,7 @@ public class View implements GLEventListener {
 	}
 
 	private void renderDebugWireCube(GL2 gl) {
-		gl.glColor3d(1.0, 1.0, 1.0);
+		gl.glColor4d(1, 1, 1, 1);
 		glut.glutWireCube((float) 1.0);
 		gl.glFlush();
 	}

@@ -23,7 +23,7 @@ public class Square extends GameObject {
 
 	@Override
 	protected void safeRender(GL2 gl) {
-		gl.glColor3d(1, 1, 1);
+		gl.glColor4d(1, 1, 1, 1);
 
 		gl.glBindTexture(GL.GL_TEXTURE_2D, texture.getHandlerId(gl));
 		gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, model.getVboHandlerId(gl));

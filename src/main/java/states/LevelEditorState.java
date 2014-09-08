@@ -1,9 +1,16 @@
 package states;
 
-import objects.gui.Panel;
-import objects.gui.anchorpoints.BottomCenterAnchor;
-import objects.scenery.ScenerySquare;
+import helpers.Texture;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import model.Model;
+import objects.gui.Panel;
+import objects.gui.PanelContent;
+import objects.gui.anchorpoints.BottomCenterAnchor;
+import objects.gui.anchorpoints.LeftCenterAnchor;
+import objects.scenery.ScenerySquare;
 
 public class LevelEditorState extends GameState {
 
@@ -25,8 +32,15 @@ public class LevelEditorState extends GameState {
 				Model.addSceneryObject(new ScenerySquare(x, y));
 			}
 		}
-		
-		Model.addGuiObject(new Panel("terrainTypes", new BottomCenterAnchor(), -250, -100, 500, 100));
+
+		List<PanelContent> terrainTypes = new ArrayList<PanelContent>();
+		Model.addGuiObject(new Panel("terrainTypes", new BottomCenterAnchor(), -250, -96, 500, 96, terrainTypes));
+		List<PanelContent> brushSizes = new ArrayList<PanelContent>();
+		brushSizes.add(new PanelContent("BigBrush", 64, 64, Texture.BIG_BRUSH));
+		brushSizes.add(new PanelContent("MediumBigBrush", 64, 64, Texture.MEDIUM_BIG_BRUSH));
+		brushSizes.add(new PanelContent("MediumBrush", 64, 64, Texture.MEDIUM_BRUSH));
+		brushSizes.add(new PanelContent("SmallBrush", 64, 64, Texture.SMALL_BRUSH));
+		Model.addGuiObject(new Panel("brushSizes", new LeftCenterAnchor(), 0, -250, 96, 500, brushSizes));
 	}
 
 }

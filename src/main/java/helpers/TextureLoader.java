@@ -16,18 +16,17 @@ public class TextureLoader {
 
 	private static final int BYTES_PER_PIXEL = 4;// 3 for RGB, 4 for RGBA
 
-	public static int loadTextureWithText(String loc, String text, Font font,
-			int xOffset, int yOffset, GL2 gl) {
+	public static int loadTextureWithText(String loc, String text, Font font, int xOffset, int yOffset, GL2 gl) {
 		BufferedImage image = loadImage(loc);
-		
+
 		renderTextOnImage(image, text, font, xOffset, yOffset);
-		
+
 		return transferImageToGpu(gl, image);
 	}
 
 	public static int loadTexture(String loc, GL2 gl) {
 		BufferedImage image = loadImage(loc);
-				
+
 		return transferImageToGpu(gl, image);
 	}
 
@@ -41,14 +40,13 @@ public class TextureLoader {
 		return null;
 	}
 
-	private static void renderTextOnImage(BufferedImage image, String text, Font font, int x,
-			int y) {
+	private static void renderTextOnImage(BufferedImage image, String text, Font font, int x, int y) {
 		Graphics2D g = image.createGraphics();
 		g.setFont(font);
 		g.drawString(text, x, y);
 		g.dispose();
 	}
-	
+
 	private static int transferImageToGpu(GL2 gl, BufferedImage image) {
 		int width = image.getWidth();
 		int height = image.getHeight();
@@ -56,12 +54,11 @@ public class TextureLoader {
 		int[] pixels = new int[width * height];
 		image.getRGB(0, 0, width, height, pixels, 0, width);
 
-		ByteBuffer buffer = ByteBuffer.allocate(width * height
-				* BYTES_PER_PIXEL);
+		ByteBuffer buffer = ByteBuffer.allocate(width * height * BYTES_PER_PIXEL);
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				Color c = new Color(image.getRGB(x, y));
+				Color c = new Color(image.getRGB(x, y), true);
 				buffer.put((byte) c.getRed()); // Red component
 				buffer.put((byte) c.getGreen()); // Green component
 				buffer.put((byte) c.getBlue()); // Blue component
@@ -76,20 +73,15 @@ public class TextureLoader {
 		gl.glBindTexture(GL.GL_TEXTURE_2D, textureID); // Bind texture ID
 
 		// Setup wrap mode
-		gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S,
-				GL2.GL_CLAMP_TO_EDGE);
-		gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T,
-				GL2.GL_CLAMP_TO_EDGE);
+		gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
+		gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
 
 		// Setup texture scaling filtering
-		gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER,
-				GL.GL_NEAREST);
-		gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER,
-				GL.GL_NEAREST);
+		gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
+		gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
 
 		// Send texel data to OpenGL
-		gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA8, width, height, 0,
-				GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, buffer);
+		gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, width, height, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, buffer);
 
 		// Return the texture ID so we can bind it later again
 		return textureID;

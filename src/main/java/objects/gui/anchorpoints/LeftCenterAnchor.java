@@ -4,20 +4,21 @@ import javax.media.opengl.GL2;
 
 import view.View;
 
-public class BottomCenterAnchor extends AnchorPoint {
+public class LeftCenterAnchor extends AnchorPoint {
 
 	@Override
 	public void setTranslation(GL2 gl) {
-		gl.glTranslated(View.getScreenWidth() / 2, View.getScreenHeight(), 0);
+		gl.glTranslated(0, View.getScreenHeight() / 2, 0);
 	}
 
 	@Override
 	public int getXComponent() {
-		return View.getScreenWidth() / 2;
+		return 0;
 	}
 
 	@Override
 	public int getYComponent() {
-		return View.getScreenHeight();
+		return View.getScreenHeight() / 2;
 	}
+
 }

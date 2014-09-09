@@ -4,9 +4,9 @@ import javax.media.opengl.GL2;
 
 import objects.gui.anchorpoints.CenterAnchor;
 
-public class EmptyObject extends GuiObject {
+public class EmptyGuiObject extends GuiObject {
 
-	public EmptyObject() {
+	public EmptyGuiObject() {
 		super("", new CenterAnchor(), 0, 0, 0, 0);
 	}
 

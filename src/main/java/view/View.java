@@ -4,6 +4,7 @@ import helpers.GameModelLoader;
 import helpers.Texture;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -139,6 +140,14 @@ public class View implements GLEventListener {
 					texCoords[texCoordsIndex] = texCoord;
 					texCoordsIndex++;
 				}
+			}
+
+			if (sceneryVboHandler >= 0) {
+				IntBuffer exHandlers = IntBuffer.allocate(2);
+				exHandlers.put(sceneryVboHandler);
+				exHandlers.put(sceneryIboHandler);
+				exHandlers.rewind();
+				gl.glDeleteBuffers(2, exHandlers);
 			}
 
 			int[] handlers = GameModelLoader.load(gl, points, indexes, texCoords);

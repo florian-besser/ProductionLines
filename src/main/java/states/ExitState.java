@@ -16,4 +16,9 @@ public class ExitState extends GameState {
 
 	}
 
+	@Override
+	public void click() {
+
+	}
+
 }

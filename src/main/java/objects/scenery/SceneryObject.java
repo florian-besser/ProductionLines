@@ -1,5 +1,6 @@
 package objects.scenery;
 
+import helpers.Texture;
 import objects.scenery.sceneryModels.SceneryModelEnum;
 
 public abstract class SceneryObject {
@@ -10,6 +11,7 @@ public abstract class SceneryObject {
 	protected int height;
 
 	protected SceneryModelEnum model;
+	protected Texture texture;
 
 	public SceneryObject(int x, int y, int width, int height) {
 		this.x = x;
@@ -21,11 +23,11 @@ public abstract class SceneryObject {
 	public float[] getPoints() {
 		return model.getPoints();
 	}
-	
+
 	public int[] getIndexes() {
 		return model.getIndexes();
 	}
-	
+
 	public float[] getTextCoords() {
 		return model.getTexCoords();
 	}
@@ -36,6 +38,14 @@ public abstract class SceneryObject {
 
 	public int getY() {
 		return y;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 
 }

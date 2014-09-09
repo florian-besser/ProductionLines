@@ -28,4 +28,9 @@ public class MainMenuState extends GameState {
 
 	}
 
+	@Override
+	public void click() {
+
+	}
+
 }

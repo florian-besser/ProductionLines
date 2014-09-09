@@ -105,6 +105,8 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 		GuiObject obj = Model.findGuiObject(e.getX(), e.getY());
 		// System.out.println("Found object " + obj.getId() + " on " + obj.getX() + " " + obj.getY() + " with dimensions " + obj.getWidth() + " " + obj.getHeight());
 		obj.click(e.getX() - obj.getX(), e.getY() - obj.getY());
+
+		Model.getState().click();
 	}
 
 	@Override

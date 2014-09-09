@@ -46,4 +46,9 @@ public class LevelEditorLoadState extends GameState {
 	public void render(Vector3D pos, GL2 gl) {
 
 	}
+
+	@Override
+	public void click() {
+
+	}
 }

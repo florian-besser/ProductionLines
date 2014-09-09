@@ -9,7 +9,7 @@ import javax.media.opengl.GL2;
 
 import model.Model;
 import objects.game.GameObject;
-import objects.game.SemiOpaqueSquare;
+import objects.game.Square;
 import objects.gui.Panel;
 import objects.gui.PanelContent;
 import objects.gui.anchorpoints.BottomCenterAnchor;
@@ -45,11 +45,11 @@ public class LevelEditorState extends GameState {
 	@Override
 	public void activate() {
 		Model.clearGuiObjects();
-		Model.clearSceneryObjects();
+		Model.clearSceneryObjects(xDimension, yDimension);
 		Model.clearGameObjects();
 		for (int x = 0; x < xDimension; x++) {
 			for (int y = 0; y < yDimension; y++) {
-				Model.addSceneryObject(new ScenerySquare(x, y));
+				Model.addSceneryObject(new ScenerySquare(x, y, Texture.DIRT_SMALL));
 			}
 		}
 
@@ -59,11 +59,26 @@ public class LevelEditorState extends GameState {
 
 	@Override
 	public void render(Vector3D pos, GL2 gl) {
+		lock.lock();
+		try {
+			removePreviewObjects();
+
+			setPreviewObjects(pos);
+
+			addPreviewObjects();
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	private void removePreviewObjects() {
 		for (GameObject gameObj : previewObjects) {
 			Model.removeGameObject(gameObj);
 		}
 		previewObjects.clear();
+	}
 
+	private void setPreviewObjects(Vector3D pos) {
 		Panel terrainTypesPanel = (Panel) Model.findGuiObject("terrainTypes");
 		Panel brushSizesPanel = (Panel) Model.findGuiObject("brushSizes");
 
@@ -71,16 +86,35 @@ public class LevelEditorState extends GameState {
 		int chosenBrush = brushSizesPanel.getChosen();
 
 		if (chosenTerrain >= 0 && chosenBrush >= 0) {
+			Texture chosenTexture = terrainTypes.get(chosenTerrain).getTexture();
 			int radius = brushSizes.size() - chosenBrush;
 			for (int x = -radius + 1; x < radius; x++) {
 				for (int y = -(radius - Math.abs(x)) + 1; y < (radius - Math.abs(x)); y++) {
-					previewObjects.add(new SemiOpaqueSquare((int) pos.getX() + x, (int) pos.getZ() + y, terrainTypes.get(chosenTerrain).getTexture()));
+					Square square = new Square((int) pos.getX() + x, (int) pos.getZ() + y, chosenTexture, true);
+					previewObjects.add(square);
 				}
 			}
 		}
+	}
 
+	private void addPreviewObjects() {
 		for (GameObject gameObj : previewObjects) {
 			Model.addGameObject(gameObj);
+		}
+	}
+
+	@Override
+	public void click() {
+		System.out.println("LevelEditorState.click called.");
+		lock.lock();
+		try {
+			for (GameObject gameObj : previewObjects) {
+				ScenerySquare square = new ScenerySquare(gameObj.getX(), gameObj.getY(), gameObj.getTexture());
+				Model.addSceneryObject(square);
+			}
+			System.out.println("Added " + previewObjects.size() + " SceneryObjects.");
+		} finally {
+			lock.unlock();
 		}
 	}
 }

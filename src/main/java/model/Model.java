@@ -1,13 +1,16 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import objects.game.EmptyGameObject;
 import objects.game.GameObject;
-import objects.gui.EmptyObject;
+import objects.gui.EmptyGuiObject;
 import objects.gui.GuiObject;
 import objects.scenery.SceneryObject;
 
@@ -24,7 +27,7 @@ public class Model {
 	private static Lock writeLock = globalLock.writeLock();
 
 	// Store
-	private static Collection<SceneryObject> sceneryObjects = new ArrayList<SceneryObject>();
+	private static SceneryObject[][] sceneryObjects;
 	private static boolean redrawScenery = false;
 	private static Collection<GameObject> gameObjects = new ArrayList<GameObject>();
 	private static Collection<GuiObject> guiObjects = new ArrayList<GuiObject>();
@@ -59,7 +62,7 @@ public class Model {
 	public static void addSceneryObject(SceneryObject object) {
 		writeLock.lock();
 		try {
-			sceneryObjects.add(object);
+			sceneryObjects[object.getX()][object.getY()] = object;
 			redrawScenery = true;
 		} finally {
 			writeLock.unlock();
@@ -84,16 +87,6 @@ public class Model {
 		}
 	}
 
-	public static void removeScneneryObject(SceneryObject object) {
-		writeLock.lock();
-		try {
-			sceneryObjects.remove(object);
-			redrawScenery = true;
-		} finally {
-			writeLock.unlock();
-		}
-	}
-
 	public static void clearGuiObjects() {
 		writeLock.lock();
 		try {
@@ -112,10 +105,10 @@ public class Model {
 		}
 	}
 
-	public static void clearSceneryObjects() {
+	public static void clearSceneryObjects(int x, int y) {
 		writeLock.lock();
 		try {
-			sceneryObjects.clear();
+			sceneryObjects = new SceneryObject[x][y];
 			redrawScenery = true;
 		} finally {
 			writeLock.unlock();
@@ -143,10 +136,18 @@ public class Model {
 	public static Collection<SceneryObject> getSceneryObjects() {
 		readLock.lock();
 		try {
-			return new ArrayList<SceneryObject>(sceneryObjects);
+			return twoDArrayToList(sceneryObjects);
 		} finally {
 			readLock.unlock();
 		}
+	}
+
+	private static <T> List<T> twoDArrayToList(T[][] twoDArray) {
+		List<T> list = new ArrayList<T>();
+		for (T[] array : twoDArray) {
+			list.addAll(Arrays.asList(array));
+		}
+		return list;
 	}
 
 	public static boolean isRedrawScenery() {
@@ -216,7 +217,21 @@ public class Model {
 			}
 		}
 
-		return new EmptyObject();
+		return new EmptyGuiObject();
+	}
+
+	public static GameObject findGameObject(int x, int y) {
+		for (GameObject gameObject : getGameObjects()) {
+			int objectX = gameObject.getX();
+			int objectY = gameObject.getY();
+			int objectWidth = gameObject.getWidth();
+			int objectHeight = gameObject.getHeight();
+			if (objectX <= x && x < objectX + objectWidth && objectY <= y && y < objectY + objectHeight) {
+				return gameObject;
+			}
+		}
+
+		return new EmptyGameObject();
 	}
 
 	public static GuiObject findGuiObject(String string) {
@@ -225,7 +240,7 @@ public class Model {
 				return guiObject;
 			}
 		}
-		return new EmptyObject();
+		return new EmptyGuiObject();
 	}
 
 	public static int getAbsoluteMouseX() {

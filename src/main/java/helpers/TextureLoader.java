@@ -21,13 +21,19 @@ public class TextureLoader {
 
 		renderTextOnImage(image, text, font, xOffset, yOffset);
 
-		return transferImageToGpu(gl, image);
+		return transferImageToGpu(gl, image, 0);
 	}
 
 	public static int loadTexture(String loc, GL2 gl) {
 		BufferedImage image = loadImage(loc);
 
-		return transferImageToGpu(gl, image);
+		return transferImageToGpu(gl, image, 0);
+	}
+
+	public static int loadTextureWithReducedOpacity(String loc, int reduceOpacity, GL2 gl) {
+		BufferedImage image = loadImage(loc);
+
+		return transferImageToGpu(gl, image, reduceOpacity);
 	}
 
 	private static BufferedImage loadImage(String loc) {
@@ -47,7 +53,7 @@ public class TextureLoader {
 		g.dispose();
 	}
 
-	private static int transferImageToGpu(GL2 gl, BufferedImage image) {
+	private static int transferImageToGpu(GL2 gl, BufferedImage image, int reduceOpacity) {
 		int width = image.getWidth();
 		int height = image.getHeight();
 
@@ -59,11 +65,14 @@ public class TextureLoader {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				Color c = new Color(image.getRGB(x, y), true);
-				buffer.put((byte) c.getRed()); // Red component
-				buffer.put((byte) c.getGreen()); // Green component
-				buffer.put((byte) c.getBlue()); // Blue component
-				buffer.put((byte) c.getAlpha()); // Alpha component. Only for
-													// RGBA
+				// Red component
+				buffer.put((byte) c.getRed());
+				// Green component
+				buffer.put((byte) c.getGreen());
+				// Blue component
+				buffer.put((byte) c.getBlue());
+				// Alpha component. Only for RGBA
+				buffer.put((byte) (c.getAlpha() - reduceOpacity));
 			}
 		}
 

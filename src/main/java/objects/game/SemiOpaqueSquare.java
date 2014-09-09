@@ -7,13 +7,14 @@ import javax.media.opengl.GL2;
 
 import objects.game.gameModels.GameModelEnum;
 
-public class Square extends GameObject {
+public class SemiOpaqueSquare extends GameObject {
 
-	protected Texture texture = Texture.DIRT;
+	protected Texture texture;
 	protected GameModelEnum model = GameModelEnum.SQUARE;
 
-	public Square(int x, int y) {
+	public SemiOpaqueSquare(int x, int y, Texture texture) {
 		super(x, y, 1, 1);
+		this.texture = texture;
 	}
 
 	@Override
@@ -25,7 +26,7 @@ public class Square extends GameObject {
 	protected void safeRender(GL2 gl) {
 		gl.glColor4d(1, 1, 1, 1);
 
-		gl.glBindTexture(GL.GL_TEXTURE_2D, texture.getHandlerId(gl));
+		gl.glBindTexture(GL.GL_TEXTURE_2D, texture.getSemiOpaqueHandlerId(gl));
 		gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, model.getVboHandlerId(gl));
 		gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, model.getIboHandlerId(gl));
 

@@ -69,4 +69,8 @@ public class PanelContent extends GuiObject {
 		chosen = false;
 	}
 
+	public Texture getTexture() {
+		return normalTexture;
+	}
+
 }

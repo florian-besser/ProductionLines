@@ -6,13 +6,15 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-
 import objects.game.GameObject;
 import objects.gui.EmptyObject;
 import objects.gui.GuiObject;
 import objects.scenery.SceneryObject;
+
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+
 import states.GameState;
+import states.MainMenuState;
 
 public class Model {
 
@@ -29,14 +31,16 @@ public class Model {
 	private static Vector3D camera = new Vector3D(0, 10, 0);
 	private static Vector3D cameraDirection = new Vector3D(1, -5, 0);
 	private static Vector3D cameraMovement = new Vector3D(0, 0, 0);
+	private static int mouseX;
+	private static int mouseY;
+	private static GameState state = new MainMenuState();
 	public static final double NEAR_CLIPPING = 1.0;
 	public static final double FAR_CLIPPING = 1000.0;
 	private static final double CAMERA_OFFSET = 10;
-	
-	
+
 	public static void addGameObject(GameObject object) {
 		writeLock.lock();
-		try{
+		try {
 			gameObjects.add(object);
 		} finally {
 			writeLock.unlock();
@@ -45,7 +49,7 @@ public class Model {
 
 	public static void addGuiObject(GuiObject object) {
 		writeLock.lock();
-		try{
+		try {
 			guiObjects.add(object);
 		} finally {
 			writeLock.unlock();
@@ -54,7 +58,7 @@ public class Model {
 
 	public static void addSceneryObject(SceneryObject object) {
 		writeLock.lock();
-		try{
+		try {
 			sceneryObjects.add(object);
 			redrawScenery = true;
 		} finally {
@@ -64,7 +68,7 @@ public class Model {
 
 	public static void removeGameObject(GameObject object) {
 		writeLock.lock();
-		try{
+		try {
 			gameObjects.remove(object);
 		} finally {
 			writeLock.unlock();
@@ -73,7 +77,7 @@ public class Model {
 
 	public static void removeGuiObject(GuiObject object) {
 		writeLock.lock();
-		try{
+		try {
 			guiObjects.remove(object);
 		} finally {
 			writeLock.unlock();
@@ -82,7 +86,7 @@ public class Model {
 
 	public static void removeScneneryObject(SceneryObject object) {
 		writeLock.lock();
-		try{
+		try {
 			sceneryObjects.remove(object);
 			redrawScenery = true;
 		} finally {
@@ -92,7 +96,7 @@ public class Model {
 
 	public static void clearGuiObjects() {
 		writeLock.lock();
-		try{
+		try {
 			guiObjects.clear();
 		} finally {
 			writeLock.unlock();
@@ -101,23 +105,23 @@ public class Model {
 
 	public static void clearGameObjects() {
 		writeLock.lock();
-		try{
+		try {
 			gameObjects.clear();
 		} finally {
 			writeLock.unlock();
 		}
 	}
-	
+
 	public static void clearSceneryObjects() {
 		writeLock.lock();
-		try{
+		try {
 			sceneryObjects.clear();
 			redrawScenery = true;
 		} finally {
 			writeLock.unlock();
 		}
 	}
-	
+
 	public static Collection<GameObject> getGameObjects() {
 		readLock.lock();
 		try {
@@ -145,27 +149,37 @@ public class Model {
 		}
 	}
 
-
 	public static boolean isRedrawScenery() {
 		return redrawScenery;
 	}
-	
+
 	public static void setNoRedrawNecessary() {
 		redrawScenery = false;
 	}
-	
+
 	public static void setState(GameState s) {
+		state = s;
 		s.activate();
+	}
+
+	public static GameState getState() {
+		return state;
 	}
 
 	public static void setCameraMovementX(int x) {
 		cameraMovement = new Vector3D(x, cameraMovement.getY(), cameraMovement.getZ());
 	}
+
 	public static void setCameraMovementY(int y) {
 		cameraMovement = new Vector3D(cameraMovement.getX(), y, cameraMovement.getZ());
 	}
+
 	public static void setCameraMovementZ(int z) {
 		cameraMovement = new Vector3D(cameraMovement.getX(), cameraMovement.getY(), z);
+	}
+
+	public static void addCameraY(double preciseWheelRotation) {
+		moveCamera(new Vector3D(0, preciseWheelRotation, 0));
 	}
 
 	public static Vector3D getCamera() {
@@ -177,7 +191,7 @@ public class Model {
 	}
 
 	public static Vector3D getCameraMovement() {
-		//System.out.println("Camera moving in " + movement.x + " " + movement.y + " " + movement.z + ", delta is " + deltaInSeconds);
+		// System.out.println("Camera moving in " + movement.x + " " + movement.y + " " + movement.z + ", delta is " + deltaInSeconds);
 		return new Vector3D(cameraMovement.toArray());
 	}
 
@@ -188,7 +202,7 @@ public class Model {
 		} else if (camera.getY() > FAR_CLIPPING - CAMERA_OFFSET) {
 			camera = new Vector3D(camera.getX(), FAR_CLIPPING - CAMERA_OFFSET, camera.getZ());
 		}
-		//System.out.println("Camera is now at " + camera.x + " " + camera.y + " " + camera.z);
+		// System.out.println("Camera is now at " + camera.x + " " + camera.y + " " + camera.z);
 	}
 
 	public static GuiObject findGuiObject(int x, int y) {
@@ -197,12 +211,11 @@ public class Model {
 			int objectY = guiObject.getY();
 			int objectWidth = guiObject.getWidth();
 			int objectHeight = guiObject.getHeight();
-			if (objectX <= x && x <= objectX + objectWidth
-					&& objectY <= y && y <= objectY + objectHeight) {
+			if (objectX <= x && x <= objectX + objectWidth && objectY <= y && y <= objectY + objectHeight) {
 				return guiObject;
 			}
 		}
-			
+
 		return new EmptyObject();
 	}
 
@@ -215,8 +228,20 @@ public class Model {
 		return new EmptyObject();
 	}
 
-	public static void addCameraY(double preciseWheelRotation) {
-		moveCamera(new Vector3D(0, preciseWheelRotation, 0));
+	public static int getAbsoluteMouseX() {
+		return mouseX;
+	}
+
+	public static int getAbsoluteMouseY() {
+		return mouseY;
+	}
+
+	public static void setAbsoluteMouseX(int x) {
+		mouseX = x;
+	}
+
+	public static void setAbsoluteMouseY(int y) {
+		mouseY = y;
 	}
 
 }

@@ -31,6 +31,7 @@ public enum Texture {
 	private int yOffset;
 
 	private int handlerId = -1;
+	private int semiOpaqueHandlerId = -1;
 
 	private Texture(String loc) {
 		this.loc = loc;
@@ -54,5 +55,17 @@ public enum Texture {
 			System.out.println("Loading Texture " + loc + " in handlerId " + handlerId);
 		}
 		return handlerId;
+	}
+
+	public int getSemiOpaqueHandlerId(GL2 gl) {
+		if (semiOpaqueHandlerId == -1) {
+			if (text != null) {
+				semiOpaqueHandlerId = TextureLoader.loadTextureWithText(loc, text, font, xOffset, yOffset, gl);
+			} else {
+				semiOpaqueHandlerId = TextureLoader.loadTextureWithReducedOpacity(loc, 100, gl);
+			}
+			System.out.println("Loading Texture " + loc + " in handlerId " + semiOpaqueHandlerId);
+		}
+		return semiOpaqueHandlerId;
 	}
 }

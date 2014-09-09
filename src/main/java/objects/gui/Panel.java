@@ -91,4 +91,8 @@ public class Panel extends GuiObject {
 			chosen = y / content.get(0).getHeight();
 		}
 	}
+
+	public int getChosen() {
+		return chosen;
+	}
 }

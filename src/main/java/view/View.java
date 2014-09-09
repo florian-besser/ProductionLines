@@ -3,6 +3,8 @@ package view;
 import helpers.GameModelLoader;
 import helpers.Texture;
 
+import java.nio.FloatBuffer;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
@@ -16,6 +18,8 @@ import objects.gui.GuiObject;
 import objects.scenery.SceneryObject;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+
+import states.GameState;
 
 import com.jogamp.opengl.util.gl2.GLUT;
 
@@ -39,6 +43,9 @@ public class View implements GLEventListener {
 	private static final double VIEW_ANGLE = Math.PI / 4;
 	private static final double RAD2ANG = 180.0 / Math.PI;
 	private static final Vector3D up = new Vector3D(0, 1, 0);
+	private double modelViewMatrix[] = new double[16];
+	private double projectionMatrix[] = new double[16];
+	private int viewport[] = new int[4];
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
@@ -65,6 +72,10 @@ public class View implements GLEventListener {
 		renderSceneryObjects(gl);
 
 		render3dObjects(gl);
+
+		GameState state = Model.getState();
+		Vector3D oglPos = getOGLPos(Model.getAbsoluteMouseX(), Model.getAbsoluteMouseY(), gl);
+		state.render(oglPos, gl);
 
 		renderDebugWireCube(gl);
 
@@ -152,6 +163,7 @@ public class View implements GLEventListener {
 
 			gl.glPushMatrix();
 
+			gl.glTranslated(0, -0.1, 0);
 			gl.glDrawElements(GL2.GL_TRIANGLES, indexesLength, GL2.GL_UNSIGNED_INT, 0);
 
 			gl.glPopMatrix();
@@ -219,10 +231,15 @@ public class View implements GLEventListener {
 		float h = ((float) screenWidth) / screenHeight;
 
 		gl.glViewport(0, 0, screenWidth, screenHeight);
+		gl.glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
+
 		gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+		gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelViewMatrix, 0);
+
 		gl.glLoadIdentity();
 		glu.gluPerspective(VIEW_ANGLE * RAD2ANG, h, Model.NEAR_CLIPPING, Model.FAR_CLIPPING);
 		gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+		gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projectionMatrix, 0);
 		gl.glLoadIdentity();
 		gl.glShadeModel(GL2.GL_SMOOTH);
 		gl.glEnable(GL.GL_DEPTH_TEST);
@@ -242,7 +259,6 @@ public class View implements GLEventListener {
 
 		gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		gl.glTranslated(0.375, 0.375, 0.0);
 
 		gl.glDisable(GL.GL_DEPTH_TEST);
 		gl.glEnable(GL2.GL_TEXTURE_2D);
@@ -263,5 +279,21 @@ public class View implements GLEventListener {
 
 	public static int getScreenHeight() {
 		return screenHeight;
+	}
+
+	private Vector3D getOGLPos(int x, int y, GL2 gl) {
+		int realy = 0;// GL y coord pos
+		double wcoord[] = new double[4];// wx, wy, wz;// returned xyz coords
+
+		realy = viewport[3] - y;
+
+		FloatBuffer winZ = FloatBuffer.allocate(1);
+		gl.glReadPixels(x, realy, 1, 1, GL2.GL_DEPTH_COMPONENT, GL.GL_FLOAT, winZ);
+
+		// System.out.println("Coordinates at cursor are (" + x + ", " + realy);
+		glu.gluUnProject((double) x, (double) realy, winZ.get(0), modelViewMatrix, 0, projectionMatrix, 0, viewport, 0, wcoord, 0);
+		// System.out.println("World coords at z=" + winZ.get(0) + " are (" + wcoord[0] + ", " + wcoord[1] + ", " + wcoord[2] + ")");
+
+		return new Vector3D(wcoord[0], wcoord[1], wcoord[2]);
 	}
 }

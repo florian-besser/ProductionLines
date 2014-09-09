@@ -119,17 +119,15 @@ public class View implements GLEventListener {
 			System.out.println("Loading Scenery with " + points.length + " points, " + indexes.length + " indexes and " + texCoords.length + " texCoords.");
 
 			for (SceneryObject sceneryObject : Model.getSceneryObjects()) {
-				int i = 0;
 				int baseIndex = pointIndex / 3;
 				for (float point : sceneryObject.getPoints()) {
-					if (i % 3 == 0) {
+					if (pointIndex % 3 == 0) {
 						point += sceneryObject.getX();
-					} else if (i % 3 == 2) {
+					} else if (pointIndex % 3 == 2) {
 						point += sceneryObject.getY();
 					}
 					points[pointIndex] = point;
 					pointIndex++;
-					i++;
 				}
 				for (int index : sceneryObject.getIndexes()) {
 					index += baseIndex;
@@ -137,6 +135,15 @@ public class View implements GLEventListener {
 					indexesIndex++;
 				}
 				for (float texCoord : sceneryObject.getTextCoords()) {
+					if (texCoordsIndex % 2 == 0) {
+						float xOffset = sceneryObject.getTexture().getXOffset();
+						float widthCoefficient = sceneryObject.getTexture().getWidthCoefficient();
+						texCoord = xOffset + texCoord * widthCoefficient;
+					} else {
+						float yOffset = sceneryObject.getTexture().getYOffset();
+						float heightCoefficient = sceneryObject.getTexture().getHeightCoefficient();
+						texCoord = yOffset + texCoord * heightCoefficient;
+					}
 					texCoords[texCoordsIndex] = texCoord;
 					texCoordsIndex++;
 				}
@@ -162,7 +169,7 @@ public class View implements GLEventListener {
 
 			gl.glColor4d(1, 1, 1, 1);
 
-			gl.glBindTexture(GL.GL_TEXTURE_2D, Texture.DIRT_SMALL.getHandlerId(gl));
+			gl.glBindTexture(GL.GL_TEXTURE_2D, Texture.WORLD.getHandlerId(gl));
 			gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, sceneryVboHandler);
 			gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, sceneryIboHandler);
 
@@ -172,7 +179,7 @@ public class View implements GLEventListener {
 
 			gl.glPushMatrix();
 
-			gl.glTranslated(0, -0.1, 0);
+			gl.glTranslated(0, -0.001, 0);
 			gl.glDrawElements(GL2.GL_TRIANGLES, indexesLength, GL2.GL_UNSIGNED_INT, 0);
 
 			gl.glPopMatrix();

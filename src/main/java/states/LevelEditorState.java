@@ -31,9 +31,9 @@ public class LevelEditorState extends GameState {
 		this.yDimension = yDimension;
 
 		terrainTypes = new ArrayList<PanelContent>();
-		terrainTypes.add(new PanelContent("Dirt", 64, 64, Texture.DIRT_SMALL));
-		terrainTypes.add(new PanelContent("Grass", 64, 64, Texture.GRASS_SMALL));
-		terrainTypes.add(new PanelContent("Blocked", 64, 64, Texture.BLOCKED_SMALL));
+		terrainTypes.add(new PanelContent("Dirt", 64, 64, Texture.DIRT));
+		terrainTypes.add(new PanelContent("Grass", 64, 64, Texture.GRASS));
+		terrainTypes.add(new PanelContent("Blocked", 64, 64, Texture.BLOCKED));
 
 		brushSizes = new ArrayList<PanelContent>();
 		brushSizes.add(new PanelContent("BigBrush", 64, 64, Texture.BIG_BRUSH));
@@ -49,7 +49,7 @@ public class LevelEditorState extends GameState {
 		Model.clearGameObjects();
 		for (int x = 0; x < xDimension; x++) {
 			for (int y = 0; y < yDimension; y++) {
-				Model.addSceneryObject(new ScenerySquare(x, y, Texture.DIRT_SMALL));
+				Model.addSceneryObject(new ScenerySquare(x, y, Texture.DIRT));
 			}
 		}
 

@@ -13,44 +13,55 @@ public enum Texture {
 	BUTTON_LOAD_LEVEL("KenneysUiPack/buttonLong_blue.png", "Load Level", FontEnum.TewntyEightDaysLater.getFont().deriveFont(32f), 10, 40),
 	BUTTON_CREATE_LEVEL("KenneysUiPack/buttonLong_blue.png", "Create Level", FontEnum.TewntyEightDaysLater.getFont().deriveFont(32f), 10, 40),
 	PANEL("KenneysUiPack/panel_blue.png"),
-	DIRT("dirt_tiled512.jpg"),
-	DIRT_SMALL("dirt_tiled128.jpg"),
-	GRASS("grass_tiled512.jpg"),
-	GRASS_SMALL("grass_tiled128.jpg"),
-	BLOCKED_SMALL("blocked_tiled128.png"),
+	DIRT("WorldTexture.jpg", 256f / 2048, 128f / 2048, 128f / 2048, 128f / 2048),
+	GRASS("WorldTexture.jpg", 256f / 2048, 0, 128f / 2048, 128f / 2048),
+	BLOCKED("WorldTexture.jpg", 128f / 2048, 128f / 2048, 128f / 2048, 128f / 2048),
 	BIG_BRUSH("BigBrush.png"),
 	MEDIUM_BIG_BRUSH("MediumBigBrush.png"),
 	MEDIUM_BRUSH("MediumBrush.png"),
 	SMALL_BRUSH("SmallBrush.png"),
-	CHOSEN("Chosen.png");
+	CHOSEN("Chosen.png"),
+	WORLD("WorldTexture.jpg");
 
 	private String loc;
 	private String text;
 	private Font font;
-	private int xOffset;
-	private int yOffset;
+	private int textXOffset;
+	private int textYOffset;
 
 	private int handlerId = -1;
 	private int semiOpaqueHandlerId = -1;
+	private float xOffset = 0;
+	private float yOffset = 0;
+	private float widthCoefficient = 1;
+	private float heightCoefficient = 1;
 
 	private Texture(String loc) {
 		this.loc = loc;
+	}
+
+	private Texture(String loc, float xOffset, float yOffset, float widthCoefficient, float heightCoefficient) {
+		this.loc = loc;
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+		this.widthCoefficient = widthCoefficient;
+		this.heightCoefficient = heightCoefficient;
 	}
 
 	private Texture(String loc, String text, Font font, int xOffset, int yOffset) {
 		this.loc = loc;
 		this.text = text;
 		this.font = font;
-		this.xOffset = xOffset;
-		this.yOffset = yOffset;
+		this.textXOffset = xOffset;
+		this.textYOffset = yOffset;
 	}
 
 	public int getHandlerId(GL2 gl) {
 		if (handlerId == -1) {
 			if (text != null) {
-				handlerId = TextureLoader.loadTextureWithText(loc, text, font, xOffset, yOffset, gl);
+				handlerId = TextureLoader.loadTextureWithText(loc, text, font, textXOffset, textYOffset, gl);
 			} else {
-				handlerId = TextureLoader.loadTexture(loc, gl);
+				handlerId = TextureLoader.loadTexture(loc, xOffset, yOffset, widthCoefficient, heightCoefficient, gl);
 			}
 			System.out.println("Loading Texture " + loc + " in handlerId " + handlerId);
 		}
@@ -59,13 +70,27 @@ public enum Texture {
 
 	public int getSemiOpaqueHandlerId(GL2 gl) {
 		if (semiOpaqueHandlerId == -1) {
-			if (text != null) {
-				semiOpaqueHandlerId = TextureLoader.loadTextureWithText(loc, text, font, xOffset, yOffset, gl);
-			} else {
-				semiOpaqueHandlerId = TextureLoader.loadTextureWithReducedOpacity(loc, 100, gl);
-			}
+
+			semiOpaqueHandlerId = TextureLoader.loadTextureWithReducedOpacity(loc, xOffset, yOffset, widthCoefficient, heightCoefficient, 100, gl);
+
 			System.out.println("Loading Texture " + loc + " in handlerId " + semiOpaqueHandlerId);
 		}
 		return semiOpaqueHandlerId;
+	}
+
+	public float getXOffset() {
+		return xOffset;
+	}
+
+	public float getYOffset() {
+		return yOffset;
+	}
+
+	public float getWidthCoefficient() {
+		return widthCoefficient;
+	}
+
+	public float getHeightCoefficient() {
+		return heightCoefficient;
 	}
 }

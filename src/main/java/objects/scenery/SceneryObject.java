@@ -32,6 +32,10 @@ public abstract class SceneryObject {
 		return model.getTexCoords();
 	}
 
+	public Texture getTexture() {
+		return texture;
+	}
+
 	public int getX() {
 		return x;
 	}

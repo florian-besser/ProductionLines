@@ -197,13 +197,14 @@ public class Model {
 	}
 
 	public static void moveCamera(Vector3D cameraMovement) {
-		camera = camera.add(cameraMovement);
+		Vector3D newCamera = camera.add(cameraMovement);
 		if (camera.getY() < NEAR_CLIPPING + CAMERA_OFFSET) {
-			camera = new Vector3D(camera.getX(), NEAR_CLIPPING + CAMERA_OFFSET, camera.getZ());
+			newCamera = new Vector3D(newCamera.getX(), NEAR_CLIPPING + CAMERA_OFFSET, newCamera.getZ());
 		} else if (camera.getY() > FAR_CLIPPING - CAMERA_OFFSET) {
-			camera = new Vector3D(camera.getX(), FAR_CLIPPING - CAMERA_OFFSET, camera.getZ());
+			newCamera = new Vector3D(newCamera.getX(), FAR_CLIPPING - CAMERA_OFFSET, newCamera.getZ());
 		}
-		// System.out.println("Camera is now at " + camera.x + " " + camera.y + " " + camera.z);
+		camera = newCamera;
+		System.out.println("Camera is now at " + camera.getX() + " " + camera.getY() + " " + camera.getZ());
 	}
 
 	public static GuiObject findGuiObject(int x, int y) {

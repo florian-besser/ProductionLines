@@ -21,19 +21,19 @@ public class TextureLoader {
 
 		renderTextOnImage(image, text, font, xOffset, yOffset);
 
-		return transferImageToGpu(gl, image, 0);
+		return transferImageToGpu(gl, image, 0, 0, 1, 1, 0);
 	}
 
-	public static int loadTexture(String loc, GL2 gl) {
+	public static int loadTexture(String loc, float xOffset, float yOffset, float widthCoefficient, float heightCoefficient, GL2 gl) {
 		BufferedImage image = loadImage(loc);
 
-		return transferImageToGpu(gl, image, 0);
+		return transferImageToGpu(gl, image, xOffset, yOffset, widthCoefficient, heightCoefficient, 0);
 	}
 
-	public static int loadTextureWithReducedOpacity(String loc, int reduceOpacity, GL2 gl) {
+	public static int loadTextureWithReducedOpacity(String loc, float xOffset, float yOffset, float widthCoefficient, float heightCoefficient, int reduceOpacity, GL2 gl) {
 		BufferedImage image = loadImage(loc);
 
-		return transferImageToGpu(gl, image, reduceOpacity);
+		return transferImageToGpu(gl, image, xOffset, yOffset, widthCoefficient, heightCoefficient, reduceOpacity);
 	}
 
 	private static BufferedImage loadImage(String loc) {
@@ -53,17 +53,17 @@ public class TextureLoader {
 		g.dispose();
 	}
 
-	private static int transferImageToGpu(GL2 gl, BufferedImage image, int reduceOpacity) {
-		int width = image.getWidth();
-		int height = image.getHeight();
+	private static int transferImageToGpu(GL2 gl, BufferedImage image, float xOffset, float yOffset, float widthCoefficient, float heightCoefficient, int reduceOpacity) {
+		int imageWidth = image.getWidth();
+		int imageHeight = image.getHeight();
 
-		int[] pixels = new int[width * height];
-		image.getRGB(0, 0, width, height, pixels, 0, width);
+		int[] pixels = new int[imageWidth * imageHeight];
+		image.getRGB(0, 0, imageWidth, imageHeight, pixels, 0, imageWidth);
 
-		ByteBuffer buffer = ByteBuffer.allocate(width * height * BYTES_PER_PIXEL);
+		ByteBuffer buffer = ByteBuffer.allocate((int) (imageWidth * widthCoefficient * imageHeight * heightCoefficient * BYTES_PER_PIXEL));
 
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
+		for (int y = (int) (imageHeight * yOffset); y < (int) (imageHeight * (yOffset + heightCoefficient)); y++) {
+			for (int x = (int) (imageWidth * xOffset); x < (int) (imageWidth * (xOffset + widthCoefficient)); x++) {
 				Color c = new Color(image.getRGB(x, y), true);
 				// Red component
 				buffer.put((byte) c.getRed());
@@ -90,7 +90,7 @@ public class TextureLoader {
 		gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
 
 		// Send texel data to OpenGL
-		gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, width, height, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, buffer);
+		gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, (int) (imageWidth * widthCoefficient), (int) (imageHeight * heightCoefficient), 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, buffer);
 
 		// Return the texture ID so we can bind it later again
 		return textureID;

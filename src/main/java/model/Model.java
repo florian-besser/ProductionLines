@@ -1,9 +1,7 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -91,7 +89,6 @@ public class Model {
 	}
 
 	public static void clearGuiObjects() {
-
 		guiObjects.clear();
 	}
 
@@ -116,20 +113,22 @@ public class Model {
 		return new ArrayList<GuiObject>(guiObjects);
 	}
 
-	public static Collection<SceneryObject> getSceneryObjects() {
-		return twoDArrayToList(sceneryObjects);
+	public static SceneryObject[] getSceneryObjects() {
+		return convertTo1DArray(sceneryObjects);
 	}
 
 	public static Collection<SceneryObject> getUpdatedSceneryObjects() {
 		return new ArrayList<SceneryObject>(updatedSceneryObjects);
 	}
 
-	private static <T> List<T> twoDArrayToList(T[][] twoDArray) {
-		List<T> list = new ArrayList<T>();
-		for (T[] array : twoDArray) {
-			list.addAll(Arrays.asList(array));
+	public static SceneryObject[] convertTo1DArray(SceneryObject[][] objects) {
+		SceneryObject[] oneDArray = new SceneryObject[objects.length * objects[0].length];
+		for (int i = 0; i < objects.length; i++) {
+			for (int s = 0; s < objects[0].length; s++) {
+				oneDArray[(i * objects[0].length) + s] = objects[i][s];
+			}
 		}
-		return list;
+		return oneDArray;
 	}
 
 	public static boolean isRedrawScenery() {

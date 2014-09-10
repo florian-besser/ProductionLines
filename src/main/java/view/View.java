@@ -1,10 +1,6 @@
 package view;
 
-import helpers.GameModelLoader;
-import helpers.Texture;
-
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -16,7 +12,6 @@ import javax.media.opengl.glu.gl2.GLUgl2;
 import model.Model;
 import objects.game.GameObject;
 import objects.gui.GuiObject;
-import objects.scenery.SceneryObject;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
@@ -33,9 +28,7 @@ public class View implements GLEventListener {
 	private int frames = 0;
 	private GLUgl2 glu = new GLUgl2();
 	private GLUT glut = new GLUT();
-	private int sceneryVboHandler;
-	private int sceneryIboHandler;
-	private int indexesLength;
+	private SceneryObjectRenderer sceneryObjectRenderer = new SceneryObjectRenderer();
 
 	// Screen
 	private static int screenWidth;
@@ -102,148 +95,18 @@ public class View implements GLEventListener {
 		Model.getWriteLock();
 		try {
 			if (Model.isRedrawScenery()) {
-				int pointsLength = 0;
-				int indexesLength = 0;
-				int texCoordsLength = 0;
-				for (SceneryObject sceneryObject : Model.getSceneryObjects()) {
-					pointsLength += sceneryObject.getPoints().length;
-					indexesLength += sceneryObject.getIndexes().length;
-					texCoordsLength += sceneryObject.getTextCoords().length;
-				}
-
-				float[] points = new float[pointsLength];
-				int pointIndex = 0;
-				int[] indexes = new int[indexesLength];
-				int indexesIndex = 0;
-				float[] texCoords = new float[texCoordsLength];
-				int texCoordsIndex = 0;
-
-				System.out.println("Loading Scenery with " + points.length + " points, " + indexes.length + " indexes and " + texCoords.length + " texCoords.");
-
-				for (SceneryObject sceneryObject : Model.getSceneryObjects()) {
-					int baseIndex = pointIndex / 3;
-					for (float point : sceneryObject.getPoints()) {
-						if (pointIndex % 3 == 0) {
-							point += sceneryObject.getX();
-						} else if (pointIndex % 3 == 2) {
-							point += sceneryObject.getY();
-						}
-						points[pointIndex] = point;
-						pointIndex++;
-					}
-					for (int index : sceneryObject.getIndexes()) {
-						index += baseIndex;
-						indexes[indexesIndex] = index;
-						indexesIndex++;
-					}
-					for (float texCoord : sceneryObject.getTextCoords()) {
-						if (texCoordsIndex % 2 == 0) {
-							float xOffset = sceneryObject.getTexture().getXOffset();
-							float widthCoefficient = sceneryObject.getTexture().getWidthCoefficient();
-							texCoord = xOffset + texCoord * widthCoefficient;
-						} else {
-							float yOffset = sceneryObject.getTexture().getYOffset();
-							float heightCoefficient = sceneryObject.getTexture().getHeightCoefficient();
-							texCoord = yOffset + texCoord * heightCoefficient;
-						}
-						texCoords[texCoordsIndex] = texCoord;
-						texCoordsIndex++;
-					}
-				}
-
-				if (sceneryVboHandler >= 0) {
-					IntBuffer exHandlers = IntBuffer.allocate(2);
-					exHandlers.put(sceneryVboHandler);
-					exHandlers.put(sceneryIboHandler);
-					exHandlers.rewind();
-					gl.glDeleteBuffers(2, exHandlers);
-				}
-
-				int[] handlers = GameModelLoader.load(gl, points, indexes, texCoords);
-				sceneryVboHandler = handlers[0];
-				sceneryIboHandler = handlers[1];
-				this.indexesLength = indexesLength;
-				Model.setNoRedrawNecessary();
-				Model.clearUpdatedSceneryObjects();
+				sceneryObjectRenderer.transferSceneryToGpu(gl);
 			} else {
-				for (SceneryObject object : Model.getUpdatedSceneryObjects()) {
-					int offset = Model.getPlayfieldDimensionX() * object.getX() + object.getY();
-
-					int pointsLength = object.getPoints().length;
-					int indexesLength = object.getIndexes().length;
-					int texCoordsLength = object.getTextCoords().length;
-
-					float[] points = new float[pointsLength];
-					int pointIndex = 0;
-					int[] indexes = new int[indexesLength];
-					int indexesIndex = 0;
-					float[] texCoords = new float[texCoordsLength];
-					int texCoordsIndex = 0;
-
-					int baseIndex = pointsLength * offset / 3;
-					for (float point : object.getPoints()) {
-						if (pointIndex % 3 == 0) {
-							point += object.getX();
-						} else if (pointIndex % 3 == 2) {
-							point += object.getY();
-						}
-						points[pointIndex] = point;
-						pointIndex++;
-					}
-					for (int index : object.getIndexes()) {
-						index += baseIndex;
-						indexes[indexesIndex] = index;
-						indexesIndex++;
-					}
-					for (float texCoord : object.getTextCoords()) {
-						if (texCoordsIndex % 2 == 0) {
-							float xOffset = object.getTexture().getXOffset();
-							float widthCoefficient = object.getTexture().getWidthCoefficient();
-							texCoord = xOffset + texCoord * widthCoefficient;
-						} else {
-							float yOffset = object.getTexture().getYOffset();
-							float heightCoefficient = object.getTexture().getHeightCoefficient();
-							texCoord = yOffset + texCoord * heightCoefficient;
-						}
-						texCoords[texCoordsIndex] = texCoord;
-						texCoordsIndex++;
-					}
-
-					GameModelLoader.update(gl, sceneryVboHandler, sceneryIboHandler, offset, points, indexes, texCoords);
-					Model.removeUpdatedSceneryObjects(object);
-				}
+				sceneryObjectRenderer.updateSceneryOnGpu(gl);
 			}
 		} finally {
 			Model.relesaseWriteLock();
 		}
 
-		if (indexesLength > 0) {
-			// long start = System.nanoTime();
-
-			gl.glColor4d(1, 1, 1, 1);
-
-			gl.glBindTexture(GL.GL_TEXTURE_2D, Texture.WORLD.getHandlerId(gl));
-			gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, sceneryVboHandler);
-			gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, sceneryIboHandler);
-
-			gl.glVertexPointer(3, GL2.GL_FLOAT, 8 * 4, 0); // 3 Vertices
-			gl.glNormalPointer(GL2.GL_FLOAT, 8 * 4, 3 * 4); // 3 Normals
-			gl.glTexCoordPointer(2, GL2.GL_FLOAT, 8 * 4, 6 * 4); // 2 Texture Coordinates
-
-			gl.glPushMatrix();
-
-			gl.glTranslated(0, -0.001, 0);
-			gl.glDrawElements(GL2.GL_TRIANGLES, indexesLength, GL2.GL_UNSIGNED_INT, 0);
-
-			gl.glPopMatrix();
-
-			gl.glBindTexture(GL.GL_TEXTURE_2D, 0);
-			gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
-			gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, 0);
-
-			// long finish = System.nanoTime();
-			// System.out.println("Used " + (finish - start)/1000000 + " ms for Scenery rendering.");
-		}
+		// long start = System.nanoTime();
+		sceneryObjectRenderer.renderScenery(gl);
+		// long finish = System.nanoTime();
+		// System.out.println("Used " + (finish - start)/1000000 + " ms for Scenery rendering.");
 	}
 
 	private void render3dObjects(GL2 gl) {

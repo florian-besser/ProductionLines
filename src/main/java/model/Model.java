@@ -28,6 +28,7 @@ public class Model {
 
 	// Store
 	private static SceneryObject[][] sceneryObjects;
+	private static Collection<SceneryObject> updatedSceneryObjects = new ArrayList<SceneryObject>();
 	private static boolean redrawScenery = false;
 	private static Collection<GameObject> gameObjects = new ArrayList<GameObject>();
 	private static Collection<GuiObject> guiObjects = new ArrayList<GuiObject>();
@@ -42,109 +43,85 @@ public class Model {
 	private static final double CAMERA_OFFSET_NEAR = 10;
 	private static final double CAMERA_OFFSET_FAR = 100;
 
-	public static void addGameObject(GameObject object) {
+	public static void relesaseWriteLock() {
+		writeLock.unlock();
+	}
+
+	public static void getWriteLock() {
 		writeLock.lock();
-		try {
-			gameObjects.add(object);
-		} finally {
-			writeLock.unlock();
-		}
+	}
+
+	public static void releaseReadLock() {
+		readLock.unlock();
+	}
+
+	public static void getReadLock() {
+		readLock.lock();
+	}
+
+	public static void addGameObject(GameObject object) {
+		gameObjects.add(object);
 	}
 
 	public static void addGuiObject(GuiObject object) {
-		writeLock.lock();
-		try {
-			guiObjects.add(object);
-		} finally {
-			writeLock.unlock();
-		}
+		guiObjects.add(object);
 	}
 
 	public static void addSceneryObject(SceneryObject object) {
-		writeLock.lock();
-		try {
-			int x = object.getX();
-			int y = object.getY();
-			if (x >= 0 && x < sceneryObjects.length && y >= 0 && y < sceneryObjects.length) {
-				sceneryObjects[x][y] = object;
-				redrawScenery = true;
+		int x = object.getX();
+		int y = object.getY();
+		if (x >= 0 && x < sceneryObjects.length && y >= 0 && y < sceneryObjects.length) {
+			sceneryObjects[x][y] = object;
+			if (!redrawScenery) {
+				updatedSceneryObjects.add(object);
 			}
-		} finally {
-			writeLock.unlock();
 		}
 	}
 
 	public static void removeGameObject(GameObject object) {
-		writeLock.lock();
-		try {
-			gameObjects.remove(object);
-		} finally {
-			writeLock.unlock();
-		}
+		gameObjects.remove(object);
 	}
 
 	public static void removeGuiObject(GuiObject object) {
-		writeLock.lock();
-		try {
-			guiObjects.remove(object);
-		} finally {
-			writeLock.unlock();
-		}
+		guiObjects.remove(object);
+	}
+
+	public static void removeUpdatedSceneryObjects(SceneryObject object) {
+		updatedSceneryObjects.remove(object);
 	}
 
 	public static void clearGuiObjects() {
-		writeLock.lock();
-		try {
-			guiObjects.clear();
-		} finally {
-			writeLock.unlock();
-		}
+
+		guiObjects.clear();
 	}
 
 	public static void clearGameObjects() {
-		writeLock.lock();
-		try {
-			gameObjects.clear();
-		} finally {
-			writeLock.unlock();
-		}
+		gameObjects.clear();
 	}
 
 	public static void clearSceneryObjects(int x, int y) {
-		writeLock.lock();
-		try {
-			sceneryObjects = new SceneryObject[x][y];
-			redrawScenery = true;
-		} finally {
-			writeLock.unlock();
-		}
+		sceneryObjects = new SceneryObject[x][y];
+		redrawScenery = true;
+	}
+
+	public static void clearUpdatedSceneryObjects() {
+		updatedSceneryObjects.clear();
 	}
 
 	public static Collection<GameObject> getGameObjects() {
-		readLock.lock();
-		try {
-			return new ArrayList<GameObject>(gameObjects);
-		} finally {
-			readLock.unlock();
-		}
+		return new ArrayList<GameObject>(gameObjects);
 	}
 
 	public static Collection<GuiObject> getGuiObjects() {
-		readLock.lock();
-		try {
-			return new ArrayList<GuiObject>(guiObjects);
-		} finally {
-			readLock.unlock();
-		}
+		return new ArrayList<GuiObject>(guiObjects);
 	}
 
 	public static Collection<SceneryObject> getSceneryObjects() {
-		readLock.lock();
-		try {
-			return twoDArrayToList(sceneryObjects);
-		} finally {
-			readLock.unlock();
-		}
+		return twoDArrayToList(sceneryObjects);
+	}
+
+	public static Collection<SceneryObject> getUpdatedSceneryObjects() {
+		return new ArrayList<SceneryObject>(updatedSceneryObjects);
 	}
 
 	private static <T> List<T> twoDArrayToList(T[][] twoDArray) {
@@ -157,6 +134,10 @@ public class Model {
 
 	public static boolean isRedrawScenery() {
 		return redrawScenery;
+	}
+
+	public static void setRedrawNecessary() {
+		redrawScenery = true;
 	}
 
 	public static void setNoRedrawNecessary() {
@@ -263,6 +244,14 @@ public class Model {
 
 	public static void setAbsoluteMouseY(int y) {
 		mouseY = y;
+	}
+
+	public static int getPlayfieldDimensionX() {
+		return sceneryObjects.length;
+	}
+
+	public static int getPlayfieldDimensionY() {
+		return sceneryObjects[0].length;
 	}
 
 }

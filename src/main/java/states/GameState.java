@@ -1,15 +1,10 @@
 package states;
 
-import java.util.concurrent.locks.ReentrantLock;
-
 import javax.media.opengl.GL2;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 public abstract class GameState {
-
-	// Locking
-	protected static ReentrantLock lock = new ReentrantLock();
 
 	public abstract void activate();
 

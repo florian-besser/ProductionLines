@@ -56,23 +56,30 @@ public class LevelEditorState extends GameState {
 
 	@Override
 	public void activate() {
-		Model.clearGuiObjects();
-		Model.clearSceneryObjects(xDimension, yDimension);
-		Model.clearGameObjects();
-		for (int x = 0; x < xDimension; x++) {
-			for (int y = 0; y < yDimension; y++) {
-				Model.addSceneryObject(new ScenerySquare(x, y, Texture.DIRT));
+		Model.getWriteLock();
+		try {
+			Model.clearGuiObjects();
+			Model.clearSceneryObjects(xDimension, yDimension);
+			Model.clearGameObjects();
+			Model.setRedrawNecessary();
+			for (int x = 0; x < xDimension; x++) {
+				for (int y = 0; y < yDimension; y++) {
+					Model.addSceneryObject(new ScenerySquare(x, y, Texture.DIRT));
+				}
 			}
+
+			Model.addGuiObject(new Panel("menuOptions", new TopCenterAnchor(), -104, 0, 208, 96, menuOptions));
+			Model.addGuiObject(new Panel("terrainTypes", new BottomCenterAnchor(), -384, -96, 768, 96, terrainTypes));
+			Model.addGuiObject(new Panel("brushSizes", new LeftCenterAnchor(), 0, -184, 96, 368, brushSizes));
+		} finally {
+			Model.relesaseWriteLock();
 		}
 
-		Model.addGuiObject(new Panel("menuOptions", new TopCenterAnchor(), -104, 0, 208, 96, menuOptions));
-		Model.addGuiObject(new Panel("terrainTypes", new BottomCenterAnchor(), -384, -96, 768, 96, terrainTypes));
-		Model.addGuiObject(new Panel("brushSizes", new LeftCenterAnchor(), 0, -184, 96, 368, brushSizes));
 	}
 
 	@Override
 	public void render(Vector3D pos, GL2 gl) {
-		lock.lock();
+		Model.getWriteLock();
 		try {
 			removePreviewObjects();
 
@@ -80,7 +87,7 @@ public class LevelEditorState extends GameState {
 
 			addPreviewObjects();
 		} finally {
-			lock.unlock();
+			Model.relesaseWriteLock();
 		}
 	}
 
@@ -111,23 +118,29 @@ public class LevelEditorState extends GameState {
 	}
 
 	private void addPreviewObjects() {
-		for (GameObject gameObj : previewObjects) {
-			Model.addGameObject(gameObj);
+		Model.getWriteLock();
+		try {
+			for (GameObject gameObj : previewObjects) {
+				Model.addGameObject(gameObj);
+			}
+		} finally {
+			Model.relesaseWriteLock();
 		}
+
 	}
 
 	@Override
 	public void click() {
-		System.out.println("LevelEditorState.click called.");
-		lock.lock();
+		Model.getWriteLock();
 		try {
+			// System.out.println("LevelEditorState.click called.");
 			for (GameObject gameObj : previewObjects) {
 				ScenerySquare square = new ScenerySquare(gameObj.getX(), gameObj.getY(), gameObj.getTexture());
 				Model.addSceneryObject(square);
 			}
-			System.out.println("Added " + previewObjects.size() + " SceneryObjects.");
+			// System.out.println("Added " + previewObjects.size() + " SceneryObjects.");
 		} finally {
-			lock.unlock();
+			Model.relesaseWriteLock();
 		}
 	}
 }

@@ -16,11 +16,17 @@ public class MainMenuState extends GameState {
 
 	@Override
 	public void activate() {
-		Model.clearGuiObjects();
-		Model.addGuiObject(new StartButton(-250, -150, 500, 100));
-		Model.addGuiObject(new LevelEditorButton(-250, 50, 500, 100));
-		Model.addGuiObject(new ExitButton(-250, 250, 500, 100));
-		Model.addGuiObject(new MenuString(-240, 300, "ProductionLines", FontEnum.TewntyEightDaysLater.getFont().deriveFont(72f)));
+		Model.getWriteLock();
+		try {
+			Model.clearGuiObjects();
+			Model.addGuiObject(new StartButton(-250, -150, 500, 100));
+			Model.addGuiObject(new LevelEditorButton(-250, 50, 500, 100));
+			Model.addGuiObject(new ExitButton(-250, 250, 500, 100));
+			Model.addGuiObject(new MenuString(-240, 300, "ProductionLines", FontEnum.TewntyEightDaysLater.getFont().deriveFont(72f)));
+		} finally {
+			Model.relesaseWriteLock();
+		}
+
 	}
 
 	@Override

@@ -75,19 +75,22 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// No functionality yet
+	public void mouseDragged(MouseEvent e) {
+		// System.out.println("Mouse dragged on " + e.getX() + " " + e.getY());
+		handleMouseMoveOrDrag(e);
+		handleMouseClickOrDrag(e);
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		Model.setAbsoluteMouseX(e.getX());
-		Model.setAbsoluteMouseY(e.getY());
+		// System.out.println("Mouse moved on " + e.getX() + " " + e.getY());
+		handleMouseMoveOrDrag(e);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// Use mousePressed instead
+		// System.out.println("Mouse clicked on " + e.getX() + " " + e.getY());
+		handleMouseClickOrDrag(e);
 	}
 
 	@Override
@@ -103,13 +106,6 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// System.out.println("Mouse pressed on " + e.getX() + " " + e.getY());
-		GuiObject obj = Model.findGuiObject(e.getX(), e.getY());
-		// System.out.println("Found object " + obj.getId() + " on " + obj.getX() + " " + obj.getY() + " with dimensions " + obj.getWidth() + " " + obj.getHeight());
-		obj.click(e.getX() - obj.getX(), e.getY() - obj.getY());
-
-		if (obj instanceof EmptyGuiObject) {
-			Model.getState().click();
-		}
 	}
 
 	@Override
@@ -121,5 +117,20 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		// System.out.println("Mouse Wheel moved by " + e.getPreciseWheelRotation()+ " units.");
 		Model.addCameraY(e.getPreciseWheelRotation());
+	}
+
+	private void handleMouseClickOrDrag(MouseEvent e) {
+		GuiObject obj = Model.findGuiObject(e.getX(), e.getY());
+		// System.out.println("Found object " + obj.getId() + " on " + obj.getX() + " " + obj.getY() + " with dimensions " + obj.getWidth() + " " + obj.getHeight());
+		obj.click(e.getX() - obj.getX(), e.getY() - obj.getY());
+
+		if (obj instanceof EmptyGuiObject) {
+			Model.getState().click();
+		}
+	}
+
+	private void handleMouseMoveOrDrag(MouseEvent e) {
+		Model.setAbsoluteMouseX(e.getX());
+		Model.setAbsoluteMouseY(e.getY());
 	}
 }

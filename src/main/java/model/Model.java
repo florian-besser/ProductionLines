@@ -32,14 +32,15 @@ public class Model {
 	private static Collection<GameObject> gameObjects = new ArrayList<GameObject>();
 	private static Collection<GuiObject> guiObjects = new ArrayList<GuiObject>();
 	private static Vector3D camera = new Vector3D(0, 10, 0);
-	private static Vector3D cameraDirection = new Vector3D(10, -50, 0);
+	private static Vector3D cameraDirection = new Vector3D(1, -5, 0);
 	private static Vector3D cameraMovement = new Vector3D(0, 0, 0);
 	private static int mouseX;
 	private static int mouseY;
 	private static GameState state = new MainMenuState();
 	public static final double NEAR_CLIPPING = 1.0;
 	public static final double FAR_CLIPPING = 1000.0;
-	private static final double CAMERA_OFFSET = 10;
+	private static final double CAMERA_OFFSET_NEAR = 10;
+	private static final double CAMERA_OFFSET_FAR = 100;
 
 	public static void addGameObject(GameObject object) {
 		writeLock.lock();
@@ -202,10 +203,10 @@ public class Model {
 
 	public static void moveCamera(Vector3D cameraMovement) {
 		Vector3D newCamera = camera.add(cameraMovement);
-		if (camera.getY() < NEAR_CLIPPING + CAMERA_OFFSET) {
-			newCamera = new Vector3D(newCamera.getX(), NEAR_CLIPPING + CAMERA_OFFSET, newCamera.getZ());
-		} else if (camera.getY() > FAR_CLIPPING - CAMERA_OFFSET) {
-			newCamera = new Vector3D(newCamera.getX(), FAR_CLIPPING - CAMERA_OFFSET, newCamera.getZ());
+		if (newCamera.getY() < NEAR_CLIPPING + CAMERA_OFFSET_NEAR) {
+			newCamera = new Vector3D(newCamera.getX(), NEAR_CLIPPING + CAMERA_OFFSET_NEAR, newCamera.getZ());
+		} else if (newCamera.getY() > FAR_CLIPPING - CAMERA_OFFSET_FAR) {
+			newCamera = new Vector3D(newCamera.getX(), FAR_CLIPPING - CAMERA_OFFSET_FAR, newCamera.getZ());
 		}
 		camera = newCamera;
 		// System.out.println("Camera is now at " + camera.getX() + " " + camera.getY() + " " + camera.getZ());

@@ -92,12 +92,6 @@ public class TextureLoader {
 		// Send texel data to OpenGL
 		gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, (int) (imageWidth * widthCoefficient), (int) (imageHeight * heightCoefficient), 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, buffer);
 
-		// gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-		// gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR_MIPMAP_NEAREST);
-
-		// GLUgl2 glu = new GLUgl2();
-		// glu.gluBuild2DMipmaps(GL.GL_TEXTURE_2D, 3, (int) (imageWidth * widthCoefficient), (int) (imageHeight * heightCoefficient), GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, buffer);
-
 		// Return the texture ID so we can bind it later again
 		return textureID;
 	}

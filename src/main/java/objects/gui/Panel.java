@@ -30,7 +30,7 @@ public class Panel extends GuiObject {
 		int yOffset = 0;
 		if (width >= height) {
 			xOffset = -width / 2 + MARGIN * 2;
-			yOffset = -height + MARGIN;
+			yOffset = y + MARGIN;
 		} else {
 			xOffset = MARGIN;
 			yOffset = -height / 2 + MARGIN * 2;
@@ -48,9 +48,9 @@ public class Panel extends GuiObject {
 			cont.internalRender(gl);
 
 			if (width >= height) {
-				xOffset += cont.getWidth();
+				xOffset += cont.getWidth() + MARGIN;
 			} else {
-				yOffset += cont.getHeight();
+				yOffset += cont.getHeight() + MARGIN;
 			}
 			i++;
 		}
@@ -85,10 +85,10 @@ public class Panel extends GuiObject {
 
 		if (width >= height) {
 			x -= MARGIN * 2;
-			chosen = x / content.get(0).getWidth();
+			chosen = x / (content.get(0).getWidth() + MARGIN);
 		} else {
 			y -= MARGIN * 2;
-			chosen = y / content.get(0).getHeight();
+			chosen = y / (content.get(0).getHeight() + MARGIN);
 		}
 	}
 

@@ -16,12 +16,20 @@ public enum Texture {
 	DIRT("WorldTexture.jpg", 256f / 2048, 128f / 2048, 128f / 2048, 128f / 2048),
 	GRASS("WorldTexture.jpg", 256f / 2048, 0, 128f / 2048, 128f / 2048),
 	BLOCKED("WorldTexture.jpg", 128f / 2048, 128f / 2048, 128f / 2048, 128f / 2048),
+	STONE("WorldTexture.jpg", 0, 0, 128f / 2048, 128f / 2048),
+	SAND("WorldTexture.jpg", 0, 384f / 2048, 128f / 2048, 128f / 2048),
+	ORE("WorldTexture.jpg", 0, 256f / 2048, 128f / 2048, 128f / 2048),
+	BLACK_ORE("WorldTexture.jpg", 256f / 2048, 256f / 2048, 128f / 2048, 128f / 2048),
+	BLUE_ORE("WorldTexture.jpg", 256f / 2048, 384f / 2048, 128f / 2048, 128f / 2048),
+	RED_ORE("WorldTexture.jpg", 384f / 2048, 384f / 2048, 128f / 2048, 128f / 2048),
 	BIG_BRUSH("BigBrush.png"),
 	MEDIUM_BIG_BRUSH("MediumBigBrush.png"),
 	MEDIUM_BRUSH("MediumBrush.png"),
 	SMALL_BRUSH("SmallBrush.png"),
 	CHOSEN("Chosen.png"),
-	WORLD("WorldTexture.jpg");
+	WORLD("WorldTexture.jpg"),
+	SAVE("save.png"),
+	EXIT("KenneysUiPack/iconCross_brown.png"), ;
 
 	private String loc;
 	private String text;

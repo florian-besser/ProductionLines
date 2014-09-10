@@ -298,18 +298,18 @@ public class View implements GLEventListener {
 	}
 
 	private Vector3D getOGLPos(int x, int y, GL2 gl) {
-		int realy = 0;// GL y coord pos
-		double wcoord[] = new double[4];// wx, wy, wz;// returned xyz coords
+		int realY = 0;// GL y coord pos
+		double woorldCoordinates[] = new double[4];
 
-		realy = viewport[3] - y;
+		realY = viewport[3] - y;
 
 		FloatBuffer winZ = FloatBuffer.allocate(1);
-		gl.glReadPixels(x, realy, 1, 1, GL2.GL_DEPTH_COMPONENT, GL.GL_FLOAT, winZ);
+		gl.glReadPixels(x, realY, 1, 1, GL2.GL_DEPTH_COMPONENT, GL.GL_FLOAT, winZ);
 
 		// System.out.println("Coordinates at cursor are (" + x + ", " + realy);
-		glu.gluUnProject((double) x, (double) realy, winZ.get(0), modelViewMatrix, 0, projectionMatrix, 0, viewport, 0, wcoord, 0);
+		glu.gluUnProject((double) x, (double) realY, winZ.get(0), modelViewMatrix, 0, projectionMatrix, 0, viewport, 0, woorldCoordinates, 0);
 		// System.out.println("World coords at z=" + winZ.get(0) + " are (" + wcoord[0] + ", " + wcoord[1] + ", " + wcoord[2] + ")");
 
-		return new Vector3D(wcoord[0], wcoord[1], wcoord[2]);
+		return new Vector3D(woorldCoordinates[0], woorldCoordinates[1], woorldCoordinates[2]);
 	}
 }

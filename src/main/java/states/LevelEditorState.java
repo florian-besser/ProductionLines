@@ -14,6 +14,7 @@ import objects.gui.Panel;
 import objects.gui.PanelContent;
 import objects.gui.anchorpoints.BottomCenterAnchor;
 import objects.gui.anchorpoints.LeftCenterAnchor;
+import objects.gui.anchorpoints.TopCenterAnchor;
 import objects.scenery.ScenerySquare;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
@@ -24,15 +25,26 @@ public class LevelEditorState extends GameState {
 	private int yDimension;
 	private List<PanelContent> terrainTypes;
 	private List<PanelContent> brushSizes;
+	private List<PanelContent> menuOptions;
 	private List<GameObject> previewObjects = new ArrayList<GameObject>();
 
 	public LevelEditorState(int xDimension, int yDimension) {
 		this.xDimension = xDimension;
 		this.yDimension = yDimension;
 
+		menuOptions = new ArrayList<PanelContent>();
+		menuOptions.add(new PanelContent("Save", 64, 64, Texture.SAVE));
+		menuOptions.add(new PanelContent("Exit", 64, 64, Texture.EXIT));
+
 		terrainTypes = new ArrayList<PanelContent>();
 		terrainTypes.add(new PanelContent("Dirt", 64, 64, Texture.DIRT));
 		terrainTypes.add(new PanelContent("Grass", 64, 64, Texture.GRASS));
+		terrainTypes.add(new PanelContent("Stone", 64, 64, Texture.STONE));
+		terrainTypes.add(new PanelContent("Sand", 64, 64, Texture.SAND));
+		terrainTypes.add(new PanelContent("Ore", 64, 64, Texture.ORE));
+		terrainTypes.add(new PanelContent("Black Ore", 64, 64, Texture.BLACK_ORE));
+		terrainTypes.add(new PanelContent("Blue Ore", 64, 64, Texture.BLUE_ORE));
+		terrainTypes.add(new PanelContent("Red Ore", 64, 64, Texture.RED_ORE));
 		terrainTypes.add(new PanelContent("Blocked", 64, 64, Texture.BLOCKED));
 
 		brushSizes = new ArrayList<PanelContent>();
@@ -53,8 +65,9 @@ public class LevelEditorState extends GameState {
 			}
 		}
 
-		Model.addGuiObject(new Panel("terrainTypes", new BottomCenterAnchor(), -250, -96, 500, 96, terrainTypes));
-		Model.addGuiObject(new Panel("brushSizes", new LeftCenterAnchor(), 0, -250, 96, 500, brushSizes));
+		Model.addGuiObject(new Panel("menuOptions", new TopCenterAnchor(), -104, 0, 208, 96, menuOptions));
+		Model.addGuiObject(new Panel("terrainTypes", new BottomCenterAnchor(), -384, -96, 768, 96, terrainTypes));
+		Model.addGuiObject(new Panel("brushSizes", new LeftCenterAnchor(), 0, -184, 96, 368, brushSizes));
 	}
 
 	@Override

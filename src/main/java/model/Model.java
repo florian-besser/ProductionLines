@@ -32,7 +32,7 @@ public class Model {
 	private static Collection<GameObject> gameObjects = new ArrayList<GameObject>();
 	private static Collection<GuiObject> guiObjects = new ArrayList<GuiObject>();
 	private static Vector3D camera = new Vector3D(0, 10, 0);
-	private static Vector3D cameraDirection = new Vector3D(1, -5, 0);
+	private static Vector3D cameraDirection = new Vector3D(10, -50, 0);
 	private static Vector3D cameraMovement = new Vector3D(0, 0, 0);
 	private static int mouseX;
 	private static int mouseY;
@@ -62,8 +62,12 @@ public class Model {
 	public static void addSceneryObject(SceneryObject object) {
 		writeLock.lock();
 		try {
-			sceneryObjects[object.getX()][object.getY()] = object;
-			redrawScenery = true;
+			int x = object.getX();
+			int y = object.getY();
+			if (x >= 0 && x < sceneryObjects.length && y >= 0 && y < sceneryObjects.length) {
+				sceneryObjects[x][y] = object;
+				redrawScenery = true;
+			}
 		} finally {
 			writeLock.unlock();
 		}
@@ -204,7 +208,7 @@ public class Model {
 			newCamera = new Vector3D(newCamera.getX(), FAR_CLIPPING - CAMERA_OFFSET, newCamera.getZ());
 		}
 		camera = newCamera;
-		System.out.println("Camera is now at " + camera.getX() + " " + camera.getY() + " " + camera.getZ());
+		// System.out.println("Camera is now at " + camera.getX() + " " + camera.getY() + " " + camera.getZ());
 	}
 
 	public static GuiObject findGuiObject(int x, int y) {

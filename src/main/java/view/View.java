@@ -263,7 +263,7 @@ public class View implements GLEventListener {
 
 		Vector3D camera = Model.getCamera();
 		Vector3D cameraDirection = Model.getCameraDirection();
-		glu.gluLookAt(camera.getX(), camera.getY(), camera.getZ(), camera.getX() + cameraDirection.getX(), camera.getZ() + cameraDirection.getY(),
+		glu.gluLookAt(camera.getX(), camera.getY(), camera.getZ(), camera.getX() + cameraDirection.getX(), camera.getY() + cameraDirection.getY(),
 				camera.getZ() + cameraDirection.getZ(), up.getX(), up.getY(), up.getZ());
 	}
 

@@ -9,6 +9,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import model.Model;
+import objects.gui.EmptyGuiObject;
 import objects.gui.GuiObject;
 import states.ExitState;
 import states.MainMenuState;
@@ -106,7 +107,9 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 		// System.out.println("Found object " + obj.getId() + " on " + obj.getX() + " " + obj.getY() + " with dimensions " + obj.getWidth() + " " + obj.getHeight());
 		obj.click(e.getX() - obj.getX(), e.getY() - obj.getY());
 
-		Model.getState().click();
+		if (obj instanceof EmptyGuiObject) {
+			Model.getState().click();
+		}
 	}
 
 	@Override

@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
@@ -38,7 +38,8 @@ public class TextureLoader {
 
 	private static BufferedImage loadImage(String loc) {
 		try {
-			return ImageIO.read(new File("src/main/resources/" + loc));
+			URL resource = TextureLoader.class.getClassLoader().getResource(loc);
+			return ImageIO.read(resource.openStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(-1);

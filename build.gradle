@@ -28,14 +28,28 @@ dependencies {
 	runtime ":gluegen-rt:2.1.0:natives-linux-i586", ":gluegen-rt:2.1.0:natives-linux-amd64", ":gluegen-rt:2.1.0:natives-windows-i586", ":gluegen-rt:2.1.0:natives-windows-amd64", ":gluegen-rt:2.1.0:natives-macosx-universal" 
 }
 
-task release(type: Copy) {
+task copyLatest(type: Copy) {
     from 'build/distributions'
     into 'releases'
     rename { String fileName ->
-        fileName.replace('ProductionLines', 'ProductionLines' + getDate())
+        fileName.replace('ProductionLines', 'ProductionLines_LATEST')
     }
 }
-release.dependsOn distZip
+copyLatest.dependsOn distZip
+
+task copyCurrent(type: Copy) {
+    from 'build/distributions'
+    into 'releases'
+    rename { String fileName ->
+        fileName.replace('ProductionLines', 'ProductionLines_' + getDate())
+    }
+}
+copyLatest.dependsOn distZip
+
+task release {
+    println 'Releasing...'
+}
+release.dependsOn copyLatest, copyCurrent
 
 uploadArchives {
 	repositories {

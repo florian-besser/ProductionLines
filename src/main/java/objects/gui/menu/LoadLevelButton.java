@@ -1,7 +1,8 @@
 package objects.gui.menu;
 
 import helpers.Texture;
-
+import model.Model;
+import states.LevelEditorState;
 
 public class LoadLevelButton extends MenuButton {
 
@@ -12,8 +13,9 @@ public class LoadLevelButton extends MenuButton {
 
 	@Override
 	public void click(int x, int y) {
-		// TODO Auto-generated method stub
-
+		PanelSelectTexts ms = (PanelSelectTexts) Model.findGuiObject("existingMaps");
+		String chosen = ms.getChosen();
+		Model.setState(new LevelEditorState(chosen + ".res"));
 	}
 
 }

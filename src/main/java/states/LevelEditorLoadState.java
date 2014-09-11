@@ -3,6 +3,7 @@ package states;
 import helpers.FontEnum;
 
 import java.awt.Font;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,14 @@ public class LevelEditorLoadState extends GameState {
 
 			Font font = FontEnum.TewntyEightDaysLater.getFont().deriveFont(48f);
 			List<String> existingMaps = new ArrayList<String>();
-			existingMaps.add("None found");
+			File folder = new File(".");
+			File[] listOfFiles = folder.listFiles();
+			for (int i = 0; i < listOfFiles.length; i++) {
+				if (listOfFiles[i].isFile() && listOfFiles[i].getName().contains(".res")) {
+					existingMaps.add(listOfFiles[i].getName().replace(".res", ""));
+				}
+			}
+
 			Model.addGuiObject(new PanelSelectTexts("existingMaps", -540, -300, 500, 500, existingMaps, font));
 
 			List<String> newMaps = new ArrayList<String>();

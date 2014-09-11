@@ -1,5 +1,6 @@
 package states;
 
+import helpers.LevelLoader;
 import helpers.Texture;
 
 import java.io.BufferedOutputStream;
@@ -22,6 +23,7 @@ import objects.gui.anchorpoints.TopCenterAnchor;
 import objects.scenery.SceneryObject;
 import objects.scenery.ScenerySquare;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 public class LevelEditorState extends GameState {
@@ -32,6 +34,7 @@ public class LevelEditorState extends GameState {
 	private List<PanelContent> brushSizes;
 	private List<PanelContent> menuOptions;
 	private List<GameObject> previewObjects = new ArrayList<GameObject>();
+	private String chosen;
 
 	public LevelEditorState(int xDimension, int yDimension) {
 		this.xDimension = xDimension;
@@ -59,6 +62,11 @@ public class LevelEditorState extends GameState {
 		brushSizes.add(new PanelContent("SmallBrush", 64, 64, Texture.SMALL_BRUSH));
 	}
 
+	public LevelEditorState(String chosen) {
+		this(0, 0);
+		this.chosen = chosen;
+	}
+
 	@Override
 	public void activate() {
 		Model.getWriteLock();
@@ -67,9 +75,13 @@ public class LevelEditorState extends GameState {
 			Model.clearSceneryObjects(xDimension, yDimension);
 			Model.clearGameObjects();
 			Model.setRedrawNecessary();
-			for (int x = 0; x < xDimension; x++) {
-				for (int y = 0; y < yDimension; y++) {
-					Model.addSceneryObject(new ScenerySquare(x, y, Texture.DIRT));
+			if (StringUtils.isNotBlank(chosen)) {
+				LevelLoader.loadLevel(chosen);
+			} else {
+				for (int x = 0; x < xDimension; x++) {
+					for (int y = 0; y < yDimension; y++) {
+						Model.addSceneryObject(new ScenerySquare(x, y, Texture.DIRT));
+					}
 				}
 			}
 

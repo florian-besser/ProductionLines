@@ -112,4 +112,15 @@ public enum Texture {
 		}
 		return i;
 	}
+
+	public static Texture getById(int id) {
+		int i = 0;
+		for (Texture t : Texture.values()) {
+			if (i == id) {
+				return t;
+			}
+			i++;
+		}
+		return null;
+	}
 }

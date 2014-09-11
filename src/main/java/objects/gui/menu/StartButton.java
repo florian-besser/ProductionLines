@@ -1,6 +1,8 @@
 package objects.gui.menu;
 
 import helpers.Texture;
+import model.Model;
+import states.Game;
 
 public class StartButton extends MenuButton {
 
@@ -11,8 +13,7 @@ public class StartButton extends MenuButton {
 
 	@Override
 	public void click(int x, int y) {
-		// TODO Auto-generated method stub
-
+		Model.setState(new Game());
 	}
 
 }

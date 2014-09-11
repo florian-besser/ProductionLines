@@ -14,7 +14,7 @@ import objects.scenery.SceneryObject;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
-import states.GameState;
+import states.AbstractGameState;
 import states.MainMenuState;
 
 public class Model {
@@ -35,7 +35,7 @@ public class Model {
 	private static Vector3D cameraMovement = new Vector3D(0, 0, 0);
 	private static int mouseX;
 	private static int mouseY;
-	private static GameState state = new MainMenuState();
+	private static AbstractGameState state = new MainMenuState();
 	public static final double NEAR_CLIPPING = 1.0;
 	public static final double FAR_CLIPPING = 1000.0;
 	private static final double CAMERA_OFFSET_NEAR = 10;
@@ -144,12 +144,12 @@ public class Model {
 		redrawScenery = false;
 	}
 
-	public static void setState(GameState s) {
+	public static void setState(AbstractGameState s) {
 		state = s;
 		s.activate();
 	}
 
-	public static GameState getState() {
+	public static AbstractGameState getState() {
 		return state;
 	}
 

@@ -18,7 +18,7 @@ import objects.gui.menu.PanelSelectTexts;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
-public class LevelEditorLoadState extends GameState {
+public class LevelEditorLoadState extends AbstractGameState {
 
 	@Override
 	public void activate() {
@@ -52,7 +52,7 @@ public class LevelEditorLoadState extends GameState {
 		}
 	}
 
-	public void findExistingMaps(List<String> existingMaps) {
+	private void findExistingMaps(List<String> existingMaps) {
 		File folder = new File("levels/");
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {

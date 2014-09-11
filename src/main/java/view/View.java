@@ -15,7 +15,7 @@ import objects.gui.GuiObject;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
-import states.GameState;
+import states.AbstractGameState;
 
 import com.jogamp.opengl.util.gl2.GLUT;
 
@@ -67,7 +67,7 @@ public class View implements GLEventListener {
 
 		render3dObjects(gl);
 
-		GameState state = Model.getState();
+		AbstractGameState state = Model.getState();
 		Vector3D oglPos = getOGLPos(Model.getAbsoluteMouseX(), Model.getAbsoluteMouseY(), gl);
 		state.render(oglPos, gl);
 

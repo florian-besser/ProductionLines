@@ -12,6 +12,7 @@ public enum Texture {
 	BUTTON_LEVEL_EDITOR("KenneysUiPack/buttonLong_blue.png", "Level Editor", FontEnum.TewntyEightDaysLater.getFont().deriveFont(32f), 15, 40),
 	BUTTON_LOAD_LEVEL("KenneysUiPack/buttonLong_blue.png", "Load Level", FontEnum.TewntyEightDaysLater.getFont().deriveFont(32f), 10, 40),
 	BUTTON_CREATE_LEVEL("KenneysUiPack/buttonLong_blue.png", "Create Level", FontEnum.TewntyEightDaysLater.getFont().deriveFont(32f), 10, 40),
+	BUTTON_START_GAME("KenneysUiPack/buttonLong_blue.png", "Start Game", FontEnum.TewntyEightDaysLater.getFont().deriveFont(32f), 10, 40),
 	PANEL("KenneysUiPack/panel_blue.png"),
 	PANEL_INSET("KenneysUiPack/panelInset_blue.png"),
 	DIRT("WorldTexture.jpg", 256f / 2048, 128f / 2048, 128f / 2048, 128f / 2048),

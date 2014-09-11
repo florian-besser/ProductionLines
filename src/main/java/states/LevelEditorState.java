@@ -20,7 +20,7 @@ import objects.scenery.ScenerySquare;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
-public class LevelEditorState extends GameState {
+public class LevelEditorState extends AbstractGameState {
 
 	private int xDimension;
 	private int yDimension;

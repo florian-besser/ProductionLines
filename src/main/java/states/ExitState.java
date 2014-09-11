@@ -4,7 +4,7 @@ import javax.media.opengl.GL2;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
-public class ExitState extends GameState {
+public class ExitState extends AbstractGameState {
 
 	@Override
 	public void activate() {

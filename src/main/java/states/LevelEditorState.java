@@ -2,6 +2,10 @@ package states;
 
 import helpers.Texture;
 
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +19,7 @@ import objects.gui.PanelContent;
 import objects.gui.anchorpoints.BottomCenterAnchor;
 import objects.gui.anchorpoints.LeftCenterAnchor;
 import objects.gui.anchorpoints.TopCenterAnchor;
+import objects.scenery.SceneryObject;
 import objects.scenery.ScenerySquare;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
@@ -86,8 +91,35 @@ public class LevelEditorState extends GameState {
 			setPreviewObjects(pos);
 
 			addPreviewObjects();
+
+			handleSaveAndExit();
 		} finally {
 			Model.relesaseWriteLock();
+		}
+	}
+
+	private void handleSaveAndExit() {
+		Panel menuOptionsPanel = (Panel) Model.findGuiObject("menuOptions");
+		int chosenAction = menuOptionsPanel.getChosen();
+
+		if (chosenAction >= 0 && chosenAction < menuOptions.size()) {
+			PanelContent chosen = menuOptions.get(chosenAction);
+			if (chosen.getId().equals("Exit")) {
+				Model.setState(new MainMenuState());
+			} else if (chosen.getId().equals("Save")) {
+				try (DataOutputStream writer = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("level.res")))) {
+					writer.writeInt(Model.getPlayfieldDimensionX());
+					writer.writeInt(Model.getPlayfieldDimensionY());
+					for (SceneryObject obj : Model.getSceneryObjects()) {
+						writer.writeInt(obj.getTexture().getId());
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					Model.setState(new ExitState());
+					return;
+				}
+				Model.setState(new MainMenuState());
+			}
 		}
 	}
 

@@ -101,4 +101,15 @@ public enum Texture {
 	public float getHeightCoefficient() {
 		return heightCoefficient;
 	}
+
+	public int getId() {
+		int i = 0;
+		for (Texture t : Texture.values()) {
+			if (t.equals(this)) {
+				break;
+			}
+			i++;
+		}
+		return i;
+	}
 }

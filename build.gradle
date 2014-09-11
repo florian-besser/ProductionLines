@@ -3,10 +3,10 @@ apply plugin: 'application'
 apply plugin: 'eclipse'
 
 sourceCompatibility = 1.7
-version = '0.1'
+//version = '0.1'
 jar {
 	manifest {
-		attributes 'Implementation-Title': 'ProductionLines', 'Implementation-Version': version
+		attributes 'Implementation-Title': 'ProductionLines', 'Implementation-Version': getDate()
 	}
 }
 mainClassName = "game.Main"
@@ -28,9 +28,14 @@ dependencies {
 	runtime ":gluegen-rt:2.1.0:natives-linux-i586", ":gluegen-rt:2.1.0:natives-linux-amd64", ":gluegen-rt:2.1.0:natives-windows-i586", ":gluegen-rt:2.1.0:natives-windows-amd64", ":gluegen-rt:2.1.0:natives-macosx-universal" 
 }
 
-test {
-	systemProperties 'property': 'value'
+task release(type: Copy) {
+    from 'build/distributions'
+    into 'releases'
+    rename { String fileName ->
+        fileName.replace('ProductionLines', 'ProductionLines' + getDate())
+    }
 }
+release.dependsOn distZip
 
 uploadArchives {
 	repositories {
@@ -41,5 +46,11 @@ uploadArchives {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.0'
+	gradleVersion = '2.0'
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMdd')
+    return formattedDate
 }

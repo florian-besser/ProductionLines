@@ -41,7 +41,19 @@ public class Game extends GameState {
 	@Override
 	public void render(Vector3D pos, GL2 gl) {
 		// TODO Auto-generated method stub
+		handleExit();
+	}
 
+	private void handleExit() {
+		Panel menuOptionsPanel = (Panel) Model.findGuiObject("menuOptions");
+		int chosenAction = menuOptionsPanel.getChosen();
+
+		if (chosenAction >= 0 && chosenAction < menuOptions.size()) {
+			PanelContent chosen = menuOptions.get(chosenAction);
+			if (chosen.getId().equals("Exit")) {
+				Model.setState(new MainMenuState());
+			}
+		}
 	}
 
 	@Override

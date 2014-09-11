@@ -46,7 +46,7 @@ task copyCurrent(type: Copy) {
     }
     outputs.upToDateWhen { false }
 }
-copyLatest.dependsOn distZip
+copyCurrent.dependsOn distZip
 
 task release {
     println 'Releasing...'

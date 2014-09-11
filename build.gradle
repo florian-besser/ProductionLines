@@ -34,6 +34,7 @@ task copyLatest(type: Copy) {
     rename { String fileName ->
         fileName.replace('ProductionLines', 'ProductionLines_LATEST')
     }
+    outputs.upToDateWhen { false }
 }
 copyLatest.dependsOn distZip
 
@@ -43,6 +44,7 @@ task copyCurrent(type: Copy) {
     rename { String fileName ->
         fileName.replace('ProductionLines', 'ProductionLines_' + getDate())
     }
+    outputs.upToDateWhen { false }
 }
 copyLatest.dependsOn distZip
 

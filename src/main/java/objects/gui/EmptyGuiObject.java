@@ -14,10 +14,4 @@ public class EmptyGuiObject extends GuiObject {
 	public void internalRender(GL2 gl) {
 
 	}
-
-	@Override
-	public void click(int x, int y) {
-		
-	}
-
 }

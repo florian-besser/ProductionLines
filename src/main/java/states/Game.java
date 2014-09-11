@@ -1,6 +1,6 @@
 package states;
 
-import helpers.LevelLoader;
+import helpers.LevelHandler;
 import helpers.Texture;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class Game extends GameState {
 			Model.clearGuiObjects();
 			Model.clearGameObjects();
 			Model.setRedrawNecessary();
-			LevelLoader.loadLevel("level.res");
+			LevelHandler.loadLevel("level");
 			Model.addGuiObject(new Panel("menuOptions", new TopCenterAnchor(), -64, 0, 128, 96, menuOptions));
 		} finally {
 			Model.relesaseWriteLock();

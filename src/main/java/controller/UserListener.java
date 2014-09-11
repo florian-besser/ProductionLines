@@ -70,8 +70,8 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// Use keyPressed instead
+	public void keyTyped(KeyEvent e) {
+		Model.getFocusGuiObject().writeChar(e.getKeyChar());
 	}
 
 	@Override
@@ -124,6 +124,7 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 		// System.out.println("Found object " + obj.getId() + " on " + obj.getX() + " " + obj.getY() + " with dimensions " + obj.getWidth() + " " + obj.getHeight());
 		obj.click(e.getX() - obj.getX(), e.getY() - obj.getY());
 
+		Model.setFocusGuiObject(obj);
 		if (obj instanceof EmptyGuiObject) {
 			Model.getState().click();
 		}

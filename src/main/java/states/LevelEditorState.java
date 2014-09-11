@@ -1,12 +1,8 @@
 package states;
 
-import helpers.LevelLoader;
+import helpers.LevelHandler;
 import helpers.Texture;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +16,8 @@ import objects.gui.PanelContent;
 import objects.gui.anchorpoints.BottomCenterAnchor;
 import objects.gui.anchorpoints.LeftCenterAnchor;
 import objects.gui.anchorpoints.TopCenterAnchor;
-import objects.scenery.SceneryObject;
 import objects.scenery.ScenerySquare;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 public class LevelEditorState extends GameState {
@@ -34,11 +28,12 @@ public class LevelEditorState extends GameState {
 	private List<PanelContent> brushSizes;
 	private List<PanelContent> menuOptions;
 	private List<GameObject> previewObjects = new ArrayList<GameObject>();
-	private String chosen;
+	private String levelName;
 
-	public LevelEditorState(int xDimension, int yDimension) {
+	public LevelEditorState(int xDimension, int yDimension, String levelName) {
 		this.xDimension = xDimension;
 		this.yDimension = yDimension;
+		this.levelName = levelName;
 
 		menuOptions = new ArrayList<PanelContent>();
 		menuOptions.add(new PanelContent("Save", 64, 64, Texture.SAVE));
@@ -62,9 +57,8 @@ public class LevelEditorState extends GameState {
 		brushSizes.add(new PanelContent("SmallBrush", 64, 64, Texture.SMALL_BRUSH));
 	}
 
-	public LevelEditorState(String chosen) {
-		this(0, 0);
-		this.chosen = chosen;
+	public LevelEditorState(String levelName) {
+		this(0, 0, levelName);
 	}
 
 	@Override
@@ -75,8 +69,8 @@ public class LevelEditorState extends GameState {
 			Model.clearSceneryObjects(xDimension, yDimension);
 			Model.clearGameObjects();
 			Model.setRedrawNecessary();
-			if (StringUtils.isNotBlank(chosen)) {
-				LevelLoader.loadLevel(chosen);
+			if (xDimension == 0 || yDimension == 0) {
+				LevelHandler.loadLevel(levelName);
 			} else {
 				for (int x = 0; x < xDimension; x++) {
 					for (int y = 0; y < yDimension; y++) {
@@ -95,6 +89,21 @@ public class LevelEditorState extends GameState {
 	}
 
 	@Override
+	public void click() {
+		Model.getWriteLock();
+		try {
+			// System.out.println("LevelEditorState.click called.");
+			for (GameObject gameObj : previewObjects) {
+				ScenerySquare square = new ScenerySquare(gameObj.getX(), gameObj.getY(), gameObj.getTexture());
+				Model.addSceneryObject(square);
+			}
+			// System.out.println("Added " + previewObjects.size() + " SceneryObjects.");
+		} finally {
+			Model.relesaseWriteLock();
+		}
+	}
+
+	@Override
 	public void render(Vector3D pos, GL2 gl) {
 		Model.getWriteLock();
 		try {
@@ -107,31 +116,6 @@ public class LevelEditorState extends GameState {
 			handleSaveAndExit();
 		} finally {
 			Model.relesaseWriteLock();
-		}
-	}
-
-	private void handleSaveAndExit() {
-		Panel menuOptionsPanel = (Panel) Model.findGuiObject("menuOptions");
-		int chosenAction = menuOptionsPanel.getChosen();
-
-		if (chosenAction >= 0 && chosenAction < menuOptions.size()) {
-			PanelContent chosen = menuOptions.get(chosenAction);
-			if (chosen.getId().equals("Exit")) {
-				Model.setState(new MainMenuState());
-			} else if (chosen.getId().equals("Save")) {
-				try (DataOutputStream writer = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("level.res")))) {
-					writer.writeInt(Model.getPlayfieldDimensionX());
-					writer.writeInt(Model.getPlayfieldDimensionY());
-					for (SceneryObject obj : Model.getSceneryObjects()) {
-						writer.writeInt(obj.getTexture().getId());
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-					Model.setState(new ExitState());
-					return;
-				}
-				Model.setState(new MainMenuState());
-			}
 		}
 	}
 
@@ -173,18 +157,19 @@ public class LevelEditorState extends GameState {
 
 	}
 
-	@Override
-	public void click() {
-		Model.getWriteLock();
-		try {
-			// System.out.println("LevelEditorState.click called.");
-			for (GameObject gameObj : previewObjects) {
-				ScenerySquare square = new ScenerySquare(gameObj.getX(), gameObj.getY(), gameObj.getTexture());
-				Model.addSceneryObject(square);
+	private void handleSaveAndExit() {
+		Panel menuOptionsPanel = (Panel) Model.findGuiObject("menuOptions");
+		int chosenAction = menuOptionsPanel.getChosen();
+
+		if (chosenAction >= 0 && chosenAction < menuOptions.size()) {
+			PanelContent chosen = menuOptions.get(chosenAction);
+			if (chosen.getId().equals("Exit")) {
+				Model.setState(new MainMenuState());
+			} else if (chosen.getId().equals("Save")) {
+				LevelHandler.saveLevel(levelName);
+				Model.setState(new MainMenuState());
 			}
-			// System.out.println("Added " + previewObjects.size() + " SceneryObjects.");
-		} finally {
-			Model.relesaseWriteLock();
 		}
 	}
+
 }

@@ -15,7 +15,7 @@ public class LoadLevelButton extends MenuButton {
 	public void click(int x, int y) {
 		PanelSelectTexts ms = (PanelSelectTexts) Model.findGuiObject("existingMaps");
 		String chosen = ms.getChosen();
-		Model.setState(new LevelEditorState(chosen + ".res"));
+		Model.setState(new LevelEditorState(chosen));
 	}
 
 }

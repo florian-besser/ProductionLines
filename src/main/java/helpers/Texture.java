@@ -13,6 +13,7 @@ public enum Texture {
 	BUTTON_LOAD_LEVEL("KenneysUiPack/buttonLong_blue.png", "Load Level", FontEnum.TewntyEightDaysLater.getFont().deriveFont(32f), 10, 40),
 	BUTTON_CREATE_LEVEL("KenneysUiPack/buttonLong_blue.png", "Create Level", FontEnum.TewntyEightDaysLater.getFont().deriveFont(32f), 10, 40),
 	PANEL("KenneysUiPack/panel_blue.png"),
+	PANEL_INSET("KenneysUiPack/panelInset_blue.png"),
 	DIRT("WorldTexture.jpg", 256f / 2048, 128f / 2048, 128f / 2048, 128f / 2048),
 	GRASS("WorldTexture.jpg", 256f / 2048, 0, 128f / 2048, 128f / 2048),
 	BLOCKED("WorldTexture.jpg", 128f / 2048, 128f / 2048, 128f / 2048, 128f / 2048),

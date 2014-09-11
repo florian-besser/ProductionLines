@@ -40,6 +40,7 @@ public class Model {
 	public static final double FAR_CLIPPING = 1000.0;
 	private static final double CAMERA_OFFSET_NEAR = 10;
 	private static final double CAMERA_OFFSET_FAR = 100;
+	private static GuiObject focusGuiObject = new EmptyGuiObject();
 
 	public static void relesaseWriteLock() {
 		writeLock.unlock();
@@ -251,6 +252,14 @@ public class Model {
 
 	public static int getPlayfieldDimensionY() {
 		return sceneryObjects[0].length;
+	}
+
+	public static void setFocusGuiObject(GuiObject obj) {
+		focusGuiObject = obj;
+	}
+
+	public static GuiObject getFocusGuiObject() {
+		return focusGuiObject;
 	}
 
 }

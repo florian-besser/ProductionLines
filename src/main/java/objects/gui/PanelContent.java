@@ -56,11 +56,6 @@ public class PanelContent extends GuiObject {
 		gl.glEnd();
 	}
 
-	@Override
-	public void click(int x, int y) {
-		// Do nothing
-	}
-
 	public void setChosen() {
 		chosen = true;
 	}

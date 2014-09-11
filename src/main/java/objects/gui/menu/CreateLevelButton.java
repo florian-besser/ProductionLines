@@ -1,9 +1,8 @@
 package objects.gui.menu;
 
-import states.LevelEditorState;
-import model.Model;
 import helpers.Texture;
-
+import model.Model;
+import states.LevelEditorState;
 
 public class CreateLevelButton extends MenuButton {
 
@@ -14,12 +13,15 @@ public class CreateLevelButton extends MenuButton {
 
 	@Override
 	public void click(int x, int y) {
-		PanelSelectTexts ms = (PanelSelectTexts) Model.findGuiObject("newMaps");
-		String levelSize = ms.getChosen();
+		PanelSelectTexts newMapsSelect = (PanelSelectTexts) Model.findGuiObject("newMaps");
+		EntryField levelNameField = (EntryField) Model.findGuiObject("LevelName");
+
+		String levelSize = newMapsSelect.getChosen();
 		String[] dimensions = levelSize.split("x");
 		int xDimension = Integer.valueOf(dimensions[0]);
 		int yDimension = Integer.valueOf(dimensions[1]);
-		Model.setState(new LevelEditorState(xDimension, yDimension));
+		String levelName = levelNameField.getConent();
+		Model.setState(new LevelEditorState(xDimension, yDimension, levelName));
 	}
 
 }

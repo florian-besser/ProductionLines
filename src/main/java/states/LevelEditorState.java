@@ -15,6 +15,7 @@ import objects.gui.Panel;
 import objects.gui.PanelContent;
 import objects.gui.anchorpoints.BottomCenterAnchor;
 import objects.gui.anchorpoints.LeftCenterAnchor;
+import objects.gui.anchorpoints.RightCenterAnchor;
 import objects.gui.anchorpoints.TopCenterAnchor;
 import objects.scenery.ScenerySquare;
 
@@ -27,6 +28,7 @@ public class LevelEditorState extends AbstractGameState {
 	private List<PanelContent> terrainTypes;
 	private List<PanelContent> brushSizes;
 	private List<PanelContent> menuOptions;
+	private List<PanelContent> startingFlags;
 	private List<GameObject> previewObjects = new ArrayList<GameObject>();
 	private String levelName;
 
@@ -55,6 +57,11 @@ public class LevelEditorState extends AbstractGameState {
 		brushSizes.add(new PanelContent("MediumBigBrush", 64, 64, Texture.MEDIUM_BIG_BRUSH));
 		brushSizes.add(new PanelContent("MediumBrush", 64, 64, Texture.MEDIUM_BRUSH));
 		brushSizes.add(new PanelContent("SmallBrush", 64, 64, Texture.SMALL_BRUSH));
+
+		startingFlags = new ArrayList<PanelContent>();
+		startingFlags.add(new PanelContent("Neutral", 64, 64, Texture.BLACK_FLAG));
+		startingFlags.add(new PanelContent("BlueStart", 64, 64, Texture.BLUE_FLAG));
+		startingFlags.add(new PanelContent("RedStart", 64, 64, Texture.RED_FLAG));
 	}
 
 	public LevelEditorState(String levelName) {
@@ -82,6 +89,7 @@ public class LevelEditorState extends AbstractGameState {
 			Model.addGuiObject(new Panel("menuOptions", new TopCenterAnchor(), -104, 0, 208, 96, menuOptions));
 			Model.addGuiObject(new Panel("terrainTypes", new BottomCenterAnchor(), -384, -96, 768, 96, terrainTypes));
 			Model.addGuiObject(new Panel("brushSizes", new LeftCenterAnchor(), 0, -184, 96, 368, brushSizes));
+			Model.addGuiObject(new Panel("startingFlags", new RightCenterAnchor(), -96, -144, 96, 288, startingFlags));
 		} finally {
 			Model.relesaseWriteLock();
 		}
@@ -129,11 +137,17 @@ public class LevelEditorState extends AbstractGameState {
 	private void setPreviewObjects(Vector3D pos) {
 		Panel terrainTypesPanel = (Panel) Model.findGuiObject("terrainTypes");
 		Panel brushSizesPanel = (Panel) Model.findGuiObject("brushSizes");
+		Panel startingFlagsPanel = (Panel) Model.findGuiObject("startingFlags");
 
 		int chosenTerrain = terrainTypesPanel.getChosen();
 		int chosenBrush = brushSizesPanel.getChosen();
+		int chosenStartingFlag = startingFlagsPanel.getChosen();
 
-		if (chosenTerrain >= 0 && chosenBrush >= 0) {
+		if (chosenStartingFlag > 0 && chosenStartingFlag < startingFlags.size()) {
+			Texture chosenTexture = startingFlags.get(chosenStartingFlag).getTexture();
+			Square square = new Square((int) pos.getX(), (int) pos.getZ(), chosenTexture, true);
+			previewObjects.add(square);
+		} else if (chosenTerrain >= 0 && chosenBrush >= 0) {
 			Texture chosenTexture = terrainTypes.get(chosenTerrain).getTexture();
 			int radius = brushSizes.size() - chosenBrush;
 			for (int x = -radius + 1; x < radius; x++) {

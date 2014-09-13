@@ -49,7 +49,9 @@ task copyCurrent(type: Copy) {
 copyCurrent.dependsOn distZip
 
 task release {
-    println 'Releasing...'
+	doLast {
+		println 'Releasing...'
+    }
 }
 release.dependsOn copyLatest, copyCurrent
 

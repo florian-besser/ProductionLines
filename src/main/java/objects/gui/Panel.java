@@ -32,7 +32,7 @@ public class Panel extends GuiObject {
 			xOffset = -width / 2 + MARGIN * 2;
 			yOffset = y + MARGIN;
 		} else {
-			xOffset = MARGIN;
+			xOffset = x + MARGIN;
 			yOffset = -height / 2 + MARGIN * 2;
 		}
 		int i = 0;

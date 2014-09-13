@@ -31,7 +31,7 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 
-		if (keyCode == KeyEvent.VK_ESCAPE || (keyCode == KeyEvent.VK_C) && e.isControlDown()) {
+		if (keyCode == KeyEvent.VK_ESCAPE || (keyCode == KeyEvent.VK_C && e.isControlDown())) {
 			System.out.println("Shutting Down...");
 
 			Model.setState(new ExitState());

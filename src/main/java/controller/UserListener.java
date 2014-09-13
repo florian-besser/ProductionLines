@@ -36,13 +36,13 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 
 			Model.setState(new ExitState());
 		} else if (keyCode == forwardKey) {
-			Model.setCameraMovementX(1);
-		} else if (keyCode == backKey) {
-			Model.setCameraMovementX(-1);
-		} else if (keyCode == leftKey) {
 			Model.setCameraMovementZ(-1);
-		} else if (keyCode == rightKey) {
+		} else if (keyCode == backKey) {
 			Model.setCameraMovementZ(1);
+		} else if (keyCode == leftKey) {
+			Model.setCameraMovementX(-1);
+		} else if (keyCode == rightKey) {
+			Model.setCameraMovementX(1);
 		} else if (keyCode == upKey) {
 			Model.setCameraMovementY(1);
 		} else if (keyCode == downKey) {
@@ -55,13 +55,13 @@ public class UserListener implements KeyListener, MouseListener, MouseMotionList
 		int keyCode = e.getKeyCode();
 
 		if (keyCode == forwardKey) {
-			Model.setCameraMovementX(0);
+			Model.setCameraMovementZ(0);
 		} else if (keyCode == backKey) {
-			Model.setCameraMovementX(0);
+			Model.setCameraMovementZ(0);
 		} else if (keyCode == leftKey) {
-			Model.setCameraMovementZ(0);
+			Model.setCameraMovementX(0);
 		} else if (keyCode == rightKey) {
-			Model.setCameraMovementZ(0);
+			Model.setCameraMovementX(0);
 		} else if (keyCode == upKey) {
 			Model.setCameraMovementY(0);
 		} else if (keyCode == downKey) {

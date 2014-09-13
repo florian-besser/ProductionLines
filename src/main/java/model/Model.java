@@ -31,7 +31,7 @@ public class Model {
 	private static Collection<GameObject> gameObjects = new ArrayList<GameObject>();
 	private static Collection<GuiObject> guiObjects = new ArrayList<GuiObject>();
 	private static Vector3D camera = new Vector3D(0, 10, 0);
-	private static Vector3D cameraDirection = new Vector3D(1, -5, 0);
+	private static Vector3D cameraDirection = new Vector3D(0, -5, -1);
 	private static Vector3D cameraMovement = new Vector3D(0, 0, 0);
 	private static int mouseX;
 	private static int mouseY;
